@@ -1,3 +1,16 @@
+import { MainContext } from "@/context.ts";
+import Header from "@/Components/Header";
+import { Route, Routes } from "react-router-dom";
+import Home from "@/Components/Home";
+
 export default function App(): JSX.Element {
-  return <></>;
+  return (
+    <MainContext.Provider value={{}}>
+      <Header />
+
+      <Routes>
+        <Route path="*" element={<Home />} />
+      </Routes>
+    </MainContext.Provider>
+  );
 }
