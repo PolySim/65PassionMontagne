@@ -1,6 +1,6 @@
 import { MainTitle, HeaderStyle } from "@/Components/Header/styled.ts";
 import { useEffect, useState } from "react";
-import NavBarLaptop from "@/Components/Header/NavBarLaptop";
+import NavBar from "@/Components/Header/NavBar";
 
 export default function Header(): JSX.Element {
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -17,7 +17,7 @@ export default function Header(): JSX.Element {
   return (
     <HeaderStyle>
       <MainTitle to={"/"}>65 Passion Montagne</MainTitle>
-      {width < 1000 ? <></> : <NavBarLaptop />}
+      {width < 1000 ? <></> : <NavBar />}
     </HeaderStyle>
   );
 }

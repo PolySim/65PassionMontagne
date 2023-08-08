@@ -8,6 +8,9 @@ export const color = {
   greenDark: "#2c6e49",
   greenLight: "#4c956c",
   black: "#0f0f0f",
+  melon: "#ffc9b9",
+  orange: "#D68C45",
+  gray: "#7d7c83",
 };
 
 export const linear_gradient_text = `
