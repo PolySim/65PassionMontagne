@@ -3,8 +3,7 @@ import {Request, Response} from "express";
 import error_query from "~/db/error_query";
 import console from "console";
 import mysql from "mysql2";
-
-const path = require('path')
+import path from "path";
 
 export const getHikingInformation = ((req: Request, res: Response) => {
   const {categoriesId} = req.body
@@ -36,4 +35,9 @@ export const getImages = ((req: Request, res: Response) => {
     error_query(error, res)
     res.json(results)
   })
+})
+
+export const getImagesState = ((req: Request, res: Response) => {
+  const imagePath = req.params.path
+  res.sendFile(path.join(__dirname, `../data/hiking_image/state/${imagePath}`))
 })

@@ -3,7 +3,7 @@ import express from "express";
 import http from "http";
 
 const app = require('./app')
-const port = 3000;
+const port = 3210;
 
 app.set('port', port)
 const server = http.createServer(app)

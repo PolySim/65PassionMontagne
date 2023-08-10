@@ -38,30 +38,63 @@ export const NavBarStyle = styled.div`
 
 export const CategoriesStyle = styled.div`
   position: relative;
+  transform: translateY(6px);
 
   &:hover > div:nth-of-type(2) {
     display: flex;
   }
 
+  &:hover > div:nth-of-type(1) {
+    padding-left: 300px;
+  }
+
   > div:nth-of-type(1) {
+    padding-bottom: 12px;
   }
 
   > div:nth-of-type(2) {
     display: none;
     flex-direction: column;
     position: absolute;
+    transform: translate(-200px);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 18px;
+    width: 600px;
   }
 `;
 
 export const Category = styled(Link)`
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: ${color.black};
   font-size: 16px;
   transition: color 0.15s ease-in-out;
-  width: 100%;
+  width: 45%;
+  height: 50px;
+
+  > img {
+    height: 90%;
+  }
 
   &:hover {
     color: ${color.greenLight};
+  }
+`;
+
+export const ImageCategory = styled.div`
+  position: absolute;
+  transform: translateX(90%);
+  width: 50%;
+  height: 100%;
+
+  > img {
+    position: absolute;
+    height: 90%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
   }
 `;
 
@@ -69,10 +102,13 @@ export const Favorite = styled(Link)`
   font-size: 16px;
   color: ${color.orange};
   text-decoration: none;
-  margin: 0 48px 0 36px;
+  margin: 0 36px;
 `;
 
-export const ConnectionStyle = styled.div``;
+export const ConnectionStyle = styled.div`
+  border-left: 1px solid #ccc;
+  padding-left: 24px;
+`;
 
 export const LogInButton = styled.button<{ $signIn: boolean }>`
   padding: 6px 12px;
@@ -219,4 +255,39 @@ export const SignInFormStyle = styled.form`
       }
     }
   }
+`;
+
+export const HikingStateStyle = styled.div<{ $visible: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  position: absolute;
+  height: 90%;
+  width: 100%;
+  opacity: ${(props) => (props.$visible ? 1 : 0)};
+
+  > div {
+    cursor: pointer;
+    position: relative;
+    z-index: 100;
+    width: 90%;
+    height: 20%;
+
+    > img {
+      border-radius: 40px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+`;
+
+export const StateName = styled(Link)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ${color.melon};
+  text-decoration: none;
 `;

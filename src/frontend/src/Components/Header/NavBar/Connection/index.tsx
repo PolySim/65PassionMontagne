@@ -4,7 +4,7 @@ import ConnectionCard from "@/Components/Header/NavBar/Connection/ConnectionCard
 import { ConnectionContext } from "@/context.ts";
 
 const Connection = () => {
-  const [signIn, setSignIn] = useState<"" | "signIn" | "signUp">("signUp");
+  const [signIn, setSignIn] = useState<"" | "signIn" | "signUp">("");
 
   return (
     <ConnectionContext.Provider
