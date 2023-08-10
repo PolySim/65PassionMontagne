@@ -7,7 +7,7 @@ const cardPadding = 12;
 
 export const HeaderStyle = styled.header`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100vw;
   height: fit-content;
@@ -30,7 +30,7 @@ export const NavBarStyle = styled.div`
   align-items: center;
   justify-content: end;
   position: relative;
-  width: calc(100vw - ${2 * headerPadding + 223}px);
+  width: max-content;
   height: 100%;
   font-family: ${font.m2};
   font-weight: 600;
@@ -45,18 +45,19 @@ export const CategoriesStyle = styled.div`
   }
 
   &:hover > div:nth-of-type(1) {
-    padding-left: 300px;
+    padding-left: 50px;
   }
 
   > div:nth-of-type(1) {
-    padding-bottom: 12px;
+    padding: 0 36px 12px 0;
   }
 
   > div:nth-of-type(2) {
     display: none;
     flex-direction: column;
     position: absolute;
-    transform: translate(-200px);
+    left: 50%;
+    transform: translateX(-50%);
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 18px;
@@ -102,7 +103,7 @@ export const Favorite = styled(Link)`
   font-size: 16px;
   color: ${color.orange};
   text-decoration: none;
-  margin: 0 36px;
+  margin: 0 36px 0 0;
 `;
 
 export const ConnectionStyle = styled.div`
@@ -273,9 +274,15 @@ export const HikingStateStyle = styled.div<{ $visible: boolean }>`
     z-index: 100;
     width: 90%;
     height: 20%;
+    border-radius: 40px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(95%);
+    }
 
     > img {
-      border-radius: 40px;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -284,10 +291,16 @@ export const HikingStateStyle = styled.div<{ $visible: boolean }>`
 `;
 
 export const StateName = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: ${color.melon};
   text-decoration: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
 `;

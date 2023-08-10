@@ -11,6 +11,7 @@ export const color = {
   melon: "#ffc9b9",
   orange: "#D68C45",
   gray: "#7d7c83",
+  lightYellow: "#fefee3",
 };
 
 export const linear_gradient_text = `

@@ -17,7 +17,7 @@ export default function Header(): JSX.Element {
   return (
     <HeaderStyle>
       <MainTitle to={"/"}>65 Passion Montagne</MainTitle>
-      {width < 1000 ? <></> : <NavBar />}
+      <NavBar />
     </HeaderStyle>
   );
 }
