@@ -39,6 +39,7 @@ export const NavBarStyle = styled.div`
 export const CategoriesStyle = styled.div`
   position: relative;
   transform: translateY(6px);
+  z-index: 10;
 
   &:hover > div:nth-of-type(2) {
     display: flex;
@@ -59,6 +60,7 @@ export const CategoriesStyle = styled.div`
     left: 50%;
     transform: translateX(-50%);
     border: 1px solid #ccc;
+    background-color: white;
     border-radius: 10px;
     padding: 18px;
     width: 600px;
@@ -131,6 +133,7 @@ export const ConnectionContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   width: 100vw;
