@@ -15,3 +15,17 @@ export const getCategoriesImage = ((req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, `../data/Menu/${imagePath}`))
   })
 })
+
+type CategoriesInformation = {
+  id: number,
+  name: string,
+  name_en: string
+}[]
+
+export const getCategoriesInformation = ((req: Request, res: Response) => {
+  connection.query(`SELECT id, name, name_en
+                    FROM categories;`, (error, results: CategoriesInformation) => {
+    error_query(error, res)
+    res.json(results)
+  })
+})

@@ -17,3 +17,23 @@ export type SignUpFormType = {
   email: string;
   username: string;
 };
+
+export type CategoriesInformation = {
+  name: string;
+  name_en: string;
+  id: number;
+}[];
+
+export type HikesState = {
+  id: number;
+  state: string;
+  path: string;
+}[];
+
+export type HikingInformation = {
+  main_image: number;
+  state: string;
+  content: string;
+  title: string;
+  images: number[];
+};

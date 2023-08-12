@@ -1,12 +1,13 @@
-import { categories } from "@/Components/Header/categories.ts";
 import {
   CategoriesStyle,
   Category,
   ImageCategory,
 } from "@/Components/Header/styled.ts";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import HikingState from "@/Components/Header/NavBar/Categories/HikingState";
+import { CategoriesInformation } from "@/type.ts";
+import { getCategoriesInformation } from "@/API/getCategoriesInformation.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -14,6 +15,22 @@ const API_KEY = import.meta.env.PROD
 
 const Categories = () => {
   const [categoryHover, setCategoryHover] = useState<number>(1);
+  const [categories, setCategories] = useState<CategoriesInformation>([
+    {
+      id: 0,
+      name: "",
+      name_en: "",
+    },
+  ]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getCategoriesInformation();
+      setCategories(data);
+    };
+
+    void getData();
+  }, []);
 
   return (
     <CategoriesStyle>
@@ -23,7 +40,7 @@ const Categories = () => {
           <Category
             onMouseEnter={() => setCategoryHover(category.id)}
             key={category.name}
-            to={`/${category.id}`}
+            to={`/${category.name_en}`}
           >
             {category.name}
           </Category>

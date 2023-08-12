@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { color, font } from "@/const_style.ts";
 
 export const HomeStyle = styled.section`
-  margin-top: 24px;
+  margin-top: 12px;
   width: 100vw;
   height: 80%;
   position: relative;
@@ -43,7 +43,6 @@ export const Find = styled.div`
     font-family: ${font.rubik};
     font-weight: 500;
     color: ${color.lightYellow};
-    //color: white;
     margin-bottom: 24px;
   }
 
