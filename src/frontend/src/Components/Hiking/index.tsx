@@ -15,6 +15,9 @@ const Hiking = () => {
     main_image: 1,
     state: "",
     title: "",
+    difficulty: "",
+    elevation: 0,
+    length: 0,
   });
 
   useEffect(() => {

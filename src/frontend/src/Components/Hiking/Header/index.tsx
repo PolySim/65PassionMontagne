@@ -1,17 +1,19 @@
-import { HeaderHikingStyle } from "@/Components/Hiking/styled.ts";
+import { HeaderHikingStyle, StarFavorite } from "@/Components/Hiking/styled.ts";
 import { HikingInformation } from "@/type.ts";
-
-const API_KEY = import.meta.env.PROD
-  ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
-  : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
+import { Star } from "@/Components/SVG/star.tsx";
+import NavBarHiking from "@/Components/Hiking/Header/NavBar";
 
 const HeaderHiking = ({ hiking }: { hiking: HikingInformation }) => {
   return (
-    <HeaderHikingStyle>
-      <img
-        src={`${API_KEY}/hiking/getImage/${hiking.main_image}`}
-        alt={hiking.title}
-      />
+    <HeaderHikingStyle $main_image={hiking.main_image}>
+      <div />
+      <h3>{hiking.title}</h3>
+      <p>{hiking.difficulty}</p>
+      <p>{hiking.state}</p>
+      <StarFavorite $isSelected={false}>
+        <Star />
+      </StarFavorite>
+      <NavBarHiking />
     </HeaderHikingStyle>
   );
 };

@@ -57,7 +57,10 @@ type HikingInformationWithoutImage = {
   main_image: number,
   state: string,
   content: string,
-  title: string
+  title: string,
+  difficulty: string,
+  length: number,
+  elevation: number
 }
 
 type HikingImage = {
@@ -69,15 +72,25 @@ type HikingInformation = {
   state: string,
   content: string,
   title: string,
+  difficulty: string,
+  length: number,
+  elevation: number,
   images: number[]
 }
 
 export const getHikingInformation = ((req: Request, res: Response) => {
   const hikingId = req.params.hikingId
   let hikingInformationWithoutImage: HikingInformationWithoutImage;
-  connection.query(`SELECT hikesState.state, hiking.content, hiking.main_image, hiking.title
+  connection.query(`SELECT hikesState.state,
+                           hiking.content,
+                           hiking.main_image,
+                           hiking.title,
+                           difficulty.difficulty,
+                           hiking.length,
+                           hiking.elevation
                     FROM hiking
                              JOIN hikesState ON hikesState.id = hiking.state_id
+                             JOIN difficulty ON difficulty.id = hiking.difficulty
                     WHERE hiking.id = ${hikingId}`, (error, results: [HikingInformationWithoutImage]) => {
     error_query(error, res)
     hikingInformationWithoutImage = results[0]
