@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { color, font } from "@/const_style.ts";
+import { MapContainer } from "react-leaflet";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -15,8 +16,8 @@ export const HikingStyle = styled.section`
     width: 80%;
     margin: 0 auto;
     box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
-    height: 500px;
     border-radius: 20px;
+    background-color: white;
   }
 `;
 
@@ -115,4 +116,64 @@ export const StarFavorite = styled.div<{ $isSelected: boolean }>`
     stroke-dasharray: 70px;
     stroke-dashoffset: 0;
   }
+`;
+
+export const HikingContent = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 0 24px;
+`;
+
+export const HikingDescription = styled.div`
+  width: 60%;
+  padding: 24px 0;
+`;
+
+export const StatisticalHiking = styled.div`
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 24px;
+  //border-bottom: 1px solid #ccc;
+
+  > div {
+    > p:nth-of-type(1) {
+      font-weight: 300;
+      margin-bottom: 6px;
+    }
+  }
+`;
+
+export const HikingResume = styled.div`
+  margin-top: 24px;
+  width: 100%;
+  font-weight: 300;
+
+  h5 {
+    font-size: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid black;
+    width: min-content;
+    margin-left: 24px;
+  }
+
+  p {
+    border-top: 1px solid #ccc;
+    padding-top: 12px;
+    margin-bottom: 24px;
+  }
+`;
+
+export const LocationHiking = styled.div`
+  width: 40%;
+  height: 300px;
+  border-left: 1px solid #ccc;
+  margin-left: 24px;
+  padding: 24px 0 0 24px;
+`;
+
+export const Map = styled(MapContainer)`
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border-radius: 10px;
 `;

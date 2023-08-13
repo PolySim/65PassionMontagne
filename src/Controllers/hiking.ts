@@ -9,7 +9,7 @@ type GPX = [{
 }]
 
 export const getGPX = ((req: Request, res: Response) => {
-  const {hikingId} = req.body
+  const hikingId = req.params.hikingId
   connection.query(`SELECT path
                     FROM GPX
                     WHERE hikingId = ${hikingId}`, (error, results: GPX) => {
@@ -60,7 +60,8 @@ type HikingInformationWithoutImage = {
   title: string,
   difficulty: string,
   length: number,
-  elevation: number
+  elevation: number,
+  duration: string
 }
 
 type HikingImage = {
@@ -75,6 +76,7 @@ type HikingInformation = {
   difficulty: string,
   length: number,
   elevation: number,
+  duration: string,
   images: number[]
 }
 
@@ -87,7 +89,8 @@ export const getHikingInformation = ((req: Request, res: Response) => {
                            hiking.title,
                            difficulty.difficulty,
                            hiking.length,
-                           hiking.elevation
+                           hiking.elevation,
+                           hiking.duration
                     FROM hiking
                              JOIN hikesState ON hikesState.id = hiking.state_id
                              JOIN difficulty ON difficulty.id = hiking.difficulty

@@ -9,7 +9,7 @@ import {
   getHikingImage
 } from "~/Controllers/hiking";
 
-router.get('/gpx', getGPX)
+router.get('/gpx/:hikingId', getGPX)
 
 router.get('/images', getImages)
 

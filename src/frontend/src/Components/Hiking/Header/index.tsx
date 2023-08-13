@@ -1,7 +1,6 @@
 import { HeaderHikingStyle, StarFavorite } from "@/Components/Hiking/styled.ts";
 import { HikingInformation } from "@/type.ts";
 import { Star } from "@/Components/SVG/star.tsx";
-import NavBarHiking from "@/Components/Hiking/Header/NavBar";
 
 const HeaderHiking = ({ hiking }: { hiking: HikingInformation }) => {
   return (
@@ -13,7 +12,6 @@ const HeaderHiking = ({ hiking }: { hiking: HikingInformation }) => {
       <StarFavorite $isSelected={false}>
         <Star />
       </StarFavorite>
-      <NavBarHiking />
     </HeaderHikingStyle>
   );
 };

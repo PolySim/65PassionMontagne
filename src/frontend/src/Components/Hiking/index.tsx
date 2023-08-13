@@ -1,9 +1,11 @@
-import { HikingStyle } from "@/Components/Hiking/styled.ts";
+import { HikingContent, HikingStyle } from "@/Components/Hiking/styled.ts";
 import HeaderHiking from "@/Components/Hiking/Header";
 import { useEffect, useState } from "react";
 import { HikingInformation } from "@/type.ts";
 import { get_hiking_information } from "@/API/getHikingInformation.ts";
 import { useParams } from "react-router-dom";
+import DescriptionHiking from "@/Components/Hiking/Description";
+import HikingLocation from "@/Components/Hiking/Location";
 
 const Hiking = () => {
   const params = useParams();
@@ -18,6 +20,7 @@ const Hiking = () => {
     difficulty: "",
     elevation: 0,
     length: 0,
+    duration: "",
   });
 
   useEffect(() => {
@@ -26,13 +29,17 @@ const Hiking = () => {
       setHiking(data);
     };
 
-    getData();
+    void getData();
   }, []);
 
   return (
     <HikingStyle>
       <div>
         <HeaderHiking hiking={hiking} />
+        <HikingContent>
+          <DescriptionHiking hiking={hiking} />
+          <HikingLocation hiking={hiking} />
+        </HikingContent>
       </div>
     </HikingStyle>
   );
