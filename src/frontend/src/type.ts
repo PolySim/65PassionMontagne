@@ -34,6 +34,7 @@ export type HikingInformation = {
   main_image: number;
   state: string;
   content: string;
+  indication: string;
   title: string;
   difficulty: string;
   length: number;

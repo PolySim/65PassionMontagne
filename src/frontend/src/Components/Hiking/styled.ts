@@ -125,7 +125,7 @@ export const HikingContent = styled.div`
 `;
 
 export const HikingDescription = styled.div`
-  width: 60%;
+  width: 65%;
   padding: 24px 0;
 `;
 
@@ -133,7 +133,6 @@ export const StatisticalHiking = styled.div`
   display: flex;
   justify-content: space-around;
   padding-bottom: 24px;
-  //border-bottom: 1px solid #ccc;
 
   > div {
     > p:nth-of-type(1) {
@@ -151,21 +150,65 @@ export const HikingResume = styled.div`
   h5 {
     font-size: 16px;
     padding-bottom: 12px;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid ${color.greenDark};
+    color: ${color.greenDark};
     width: min-content;
     margin-left: 24px;
   }
 
   p {
     border-top: 1px solid #ccc;
+    line-height: 24px;
     padding-top: 12px;
     margin-bottom: 24px;
   }
 `;
 
+export const DownloadHiking = styled.div`
+  margin-top: 48px;
+  width: 100%;
+  font-weight: 300;
+  border-top: 1px solid #ccc;
+
+  > h5 {
+    margin-top: 24px;
+    font-size: 16px;
+    margin-left: 24px;
+    color: ${color.greenDark};
+  }
+
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    font-weight: 400;
+
+    > a {
+      margin-top: 36px;
+      color: black;
+      text-decoration: none;
+      padding: 12px 28px;
+      background-color: ${color.orange};
+      border-radius: 15px;
+      width: 240px;
+    }
+
+    > div {
+      margin-top: 36px;
+      padding: 12px 28px;
+      background-color: ${color.greenLight};
+      color: ${color.lightYellow};
+      border-radius: 15px;
+      width: 240px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+`;
+
 export const LocationHiking = styled.div`
-  width: 40%;
-  height: 300px;
+  width: 35%;
+  height: max-content;
   border-left: 1px solid #ccc;
   margin-left: 24px;
   padding: 24px 0 0 24px;
@@ -173,7 +216,22 @@ export const LocationHiking = styled.div`
 
 export const Map = styled(MapContainer)`
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16/9;
   outline: none;
   border-radius: 10px;
+  z-index: 0;
+`;
+
+export const ImageHiking = styled.div`
+  width: 100%;
+  aspect-ratio: 16/9;
+  margin: 24px 0;
+  border-radius: 10px;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;

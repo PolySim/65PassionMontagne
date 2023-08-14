@@ -3,6 +3,7 @@ import {Request, Response} from "express";
 import error_query from "~/db/error_query";
 import console from "console";
 import path from "path";
+import {QueryError} from "mysql2";
 
 type GPX = [{
   path: string
@@ -12,7 +13,7 @@ export const getGPX = ((req: Request, res: Response) => {
   const hikingId = req.params.hikingId
   connection.query(`SELECT path
                     FROM GPX
-                    WHERE hikingId = ${hikingId}`, (error, results: GPX) => {
+                    WHERE hikingId = ${hikingId}`, (error: QueryError, results: GPX) => {
     error_query(error, res)
     const gpx = results[0].path
     res.sendFile(path.join(__dirname, `../data/gpx/${gpx}`))
@@ -57,6 +58,7 @@ type HikingInformationWithoutImage = {
   main_image: number,
   state: string,
   content: string,
+  indication: string,
   title: string,
   difficulty: string,
   length: number,
@@ -72,6 +74,7 @@ type HikingInformation = {
   main_image: number,
   state: string,
   content: string,
+  indication: string,
   title: string,
   difficulty: string,
   length: number,
@@ -85,6 +88,7 @@ export const getHikingInformation = ((req: Request, res: Response) => {
   let hikingInformationWithoutImage: HikingInformationWithoutImage;
   connection.query(`SELECT hikesState.state,
                            hiking.content,
+                           hiking.indication,
                            hiking.main_image,
                            hiking.title,
                            difficulty.difficulty,

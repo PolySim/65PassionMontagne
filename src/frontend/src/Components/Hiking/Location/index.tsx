@@ -1,4 +1,8 @@
-import { LocationHiking, Map } from "@/Components/Hiking/styled.ts";
+import {
+  ImageHiking,
+  LocationHiking,
+  Map,
+} from "@/Components/Hiking/styled.ts";
 import { HikingInformation } from "@/type.ts";
 import { useParams } from "react-router-dom";
 import { Polyline, TileLayer } from "react-leaflet";
@@ -45,7 +49,7 @@ const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
         // @ts-ignore
         center={positionCenter}
         zoom={11.5}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Polyline
@@ -53,6 +57,14 @@ const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
           positions={positions}
         />
       </Map>
+      {hiking.images.map((image) => (
+        <ImageHiking key={image}>
+          <img
+            src={`${API_KEY}/hiking/getImage/${image}`}
+            alt={`image-${image}`}
+          />
+        </ImageHiking>
+      ))}
     </LocationHiking>
   );
 };
