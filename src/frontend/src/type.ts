@@ -1,6 +1,16 @@
 import React from "react";
 
-export type MainContextType = {};
+export type MainContextType = {
+  user: UserType | null;
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+};
+
+export type UserType = {
+  id: number;
+  username: string;
+  profilePicturePath: string;
+  role: number;
+};
 
 export type ConnectionContextType = {
   signIn: "" | "signIn" | "signUp";
@@ -42,3 +52,15 @@ export type HikingInformation = {
   duration: string;
   images: number[];
 };
+
+export type SignInType =
+  | UserType
+  | {
+      error: "password" | "username";
+    };
+
+export type SignUpType =
+  | UserType
+  | {
+      error: "email" | "username";
+    };

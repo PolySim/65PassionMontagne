@@ -43,11 +43,11 @@ export const signUp = (async (req: Request, res: Response) => {
     }) as [{ id: number }];
 
     if (usernameResult[0]) {
-      return res.json({username: 'error'});
+      return res.json({error: 'username'});
     }
 
     if (emailResult[0]) {
-      return res.json({email: 'error'});
+      return res.json({error: 'email'});
     }
 
     await insertUserQuery({
@@ -69,22 +69,21 @@ export const signIn = (async (req: Request, res: Response) => {
     const getPasswordEncrypt = util.promisify(connection.query).bind(connection);
 
     const passwordResult = await getPasswordEncrypt({
-      sql: `SELECT iv, password, username, profilePicturePath, role
+      sql: `SELECT id, iv, password, username, profilePicturePath, role
             FROM user
             WHERE username = ?
                OR email = ? `,
       values: [username, username]
-    }) as [{ iv: string, password: string, username: string, profilePicturePath: string, role: number }]
+    }) as [{ id: number, iv: string, password: string, username: string, profilePicturePath: string, role: number }]
 
     if (!passwordResult[0]) {
-      return res.json({username: 'error'})
+      return res.json({error: 'username'})
     }
 
-    console.log(passwordResult)
     const passwordDecrypt = await decrypt(passwordResult[0].password, passwordResult[0].iv)
 
     if (passwordDecrypt !== password) {
-      return res.json({password: 'error'})
+      return res.json({error: 'password'})
     }
 
     const result = Object.keys(passwordResult[0])

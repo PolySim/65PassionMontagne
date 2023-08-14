@@ -101,7 +101,6 @@ export const getHikingInformation = ((req: Request, res: Response) => {
                     WHERE hiking.id = ${hikingId}`, (error, results: [HikingInformationWithoutImage]) => {
     error_query(error, res)
     hikingInformationWithoutImage = results[0]
-    console.log(hikingInformationWithoutImage)
   })
   connection.query(`SELECT id
                     FROM images

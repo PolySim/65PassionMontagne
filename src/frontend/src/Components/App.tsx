@@ -5,10 +5,19 @@ import Home from "@/Components/Home";
 import { Container } from "@/styled.ts";
 import Footer from "@/Components/Footer";
 import Hiking from "@/Components/Hiking";
+import { useState } from "react";
+import { UserType } from "@/type.ts";
 
 export default function App(): JSX.Element {
+  const [user, setUser] = useState<UserType | null>(null);
+
   return (
-    <MainContext.Provider value={{}}>
+    <MainContext.Provider
+      value={{
+        user,
+        setUser,
+      }}
+    >
       <Container>
         <Header />
 
