@@ -1,6 +1,6 @@
-import {NextFunction, Request, Response} from "express";
 import express from "express";
 import http from "http";
+import 'dotenv/config'
 
 const app = require('./app')
 const port = 3210;
