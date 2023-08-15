@@ -66,7 +66,7 @@ export const signUp = async (req: Request, res: Response) => {
     return res.json({
       id: userId[0].id,
       username: username,
-      profilePath: "default.jpg",
+      profilePath: "default.png",
       role: 0,
       favorite: [],
     });
