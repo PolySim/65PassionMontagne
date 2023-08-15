@@ -6,6 +6,9 @@ import {
 } from "@/Components/Hiking/styled.ts";
 import { HikingInformation } from "@/type.ts";
 import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { MainContext } from "@/context.ts";
+import { add_favorite } from "@/API/addFavorite.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -14,6 +17,19 @@ const API_KEY = import.meta.env.PROD
 const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
   const params = useParams();
   const hikingId = parseInt(params.hikindId || "1");
+  const { user, setUser } = useContext(MainContext);
+
+  const handlerFavorite = async () => {
+    if (user && !user.favorite.includes(hikingId)) {
+      const res = await add_favorite(user.id, hikingId);
+      if ("result" in res) {
+        setUser((curr) =>
+          curr ? { ...curr, favorite: [...curr.favorite, hikingId] } : null,
+        );
+      }
+      console.log(res);
+    }
+  };
 
   return (
     <HikingDescription>
@@ -43,7 +59,7 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
           <a href={`${API_KEY}/hiking/gpx/${hikingId}`} download>
             Télécharge le tracet GPX
           </a>
-          <div>Ajoute le en favori</div>
+          <div onClick={handlerFavorite}>Ajoute le en favori</div>
         </div>
       </DownloadHiking>
     </HikingDescription>

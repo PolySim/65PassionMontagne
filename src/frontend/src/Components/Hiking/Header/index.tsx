@@ -13,7 +13,6 @@ const HeaderHiking = ({ hiking }: { hiking: HikingInformation }) => {
   const hikingId = parseInt(params.hikingId || "-1");
 
   const handlerFavorite = async () => {
-    console.log(user?.favorite, hikingId);
     if (user && user.favorite.includes(hikingId)) {
       const res = await remove_favorite(user.id, hikingId);
       if ("result" in res) {
