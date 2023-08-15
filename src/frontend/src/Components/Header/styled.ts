@@ -307,3 +307,14 @@ export const StateName = styled(Link)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
 `;
+
+export const ProfileButtonStyle = styled.div`
+  padding: 6px 12px;
+  margin-left: 12px;
+  border-radius: 12px;
+  width: fit-content;
+  height: fit-content;
+  background-color: ${color.orange};
+  color: ${color.lightYellow};
+  cursor: pointer;
+`;

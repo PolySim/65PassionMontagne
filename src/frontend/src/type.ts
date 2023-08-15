@@ -10,6 +10,7 @@ export type UserType = {
   username: string;
   profilePicturePath: string;
   role: number;
+  favorite: number[];
 };
 
 export type ConnectionContextType = {
@@ -63,4 +64,12 @@ export type SignUpType =
   | UserType
   | {
       error: "email" | "username";
+    };
+
+export type QueryResult =
+  | {
+      result: string;
+    }
+  | {
+      error: string;
     };
