@@ -4,6 +4,7 @@ import console from "console";
 import { encrypt } from "~/Encrypt/encrypt";
 import { decrypt } from "~/Encrypt/decrypt";
 import * as util from "util";
+import path from "path";
 
 export const getUserName = (req: Request, res: Response) => {
   connection.query("SELECT username FROM user", (error, results, fields) => {
@@ -175,4 +176,26 @@ export const removeFavorite = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: "remove favorite error" });
   }
+};
+
+export const imageUser = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  const imageQuery = util.promisify(connection.query).bind(connection);
+
+  const pathResult = (await imageQuery({
+    sql: `SELECT profilePicturePath
+          FROM user
+          WHERE id = ?`,
+    values: [userId],
+  })) as [{ profilePicturePath: string }];
+
+  pathResult[0]
+    ? res.sendFile(
+        path.join(
+          __dirname,
+          `../data/user_image/${pathResult[0].profilePicturePath}`,
+        ),
+      )
+    : res.sendFile(path.join(__dirname, `../data/user_image/default.png`));
 };

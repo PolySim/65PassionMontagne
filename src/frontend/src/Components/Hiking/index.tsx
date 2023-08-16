@@ -20,6 +20,7 @@ const Hiking = () => {
     difficulty: "",
     elevation: 0,
     length: 0,
+    indication: "",
     duration: "",
   });
 

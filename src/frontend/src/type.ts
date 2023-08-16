@@ -73,3 +73,9 @@ export type QueryResult =
   | {
       error: string;
     };
+
+export type CommentsType = {
+  content: string;
+  userId: number;
+  username: string;
+}[];

@@ -1,14 +1,18 @@
 import {
+  Comments,
   DownloadHiking,
   HikingDescription,
   HikingResume,
   StatisticalHiking,
 } from "@/Components/Hiking/styled.ts";
-import { HikingInformation } from "@/type.ts";
+import { CommentsType, HikingInformation } from "@/type.ts";
 import { useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context.ts";
 import { add_favorite } from "@/API/addFavorite.ts";
+import { get_comments } from "@/API/getComments.ts";
+import Comment from "@/Components/Hiking/Description/Comment";
+import WriteComment from "@/Components/Hiking/Description/WriteComment";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -18,6 +22,7 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
   const params = useParams();
   const hikingId = parseInt(params.hikindId || "1");
   const { user, setUser } = useContext(MainContext);
+  const [comments, setComments] = useState<CommentsType>([]);
 
   const handlerFavorite = async () => {
     if (user && !user.favorite.includes(hikingId)) {
@@ -30,6 +35,19 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
       console.log(res);
     }
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await get_comments(hikingId);
+      if ("error" in res) {
+        console.log(res);
+        return;
+      }
+      setComments(res);
+    };
+
+    void getData();
+  }, []);
 
   return (
     <HikingDescription>
@@ -62,6 +80,12 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
           <div onClick={handlerFavorite}>Ajoute le en favori</div>
         </div>
       </DownloadHiking>
+      <WriteComment user={user} setComments={setComments} />
+      <Comments>
+        {comments.map((comment, i) => (
+          <Comment key={`comment- ${i}`} comment={comment} />
+        ))}
+      </Comments>
     </HikingDescription>
   );
 };

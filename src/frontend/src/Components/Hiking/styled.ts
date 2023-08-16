@@ -235,3 +235,74 @@ export const ImageHiking = styled.div`
     object-fit: cover;
   }
 `;
+
+export const Comments = styled.div`
+  width: 100%;
+`;
+
+export const CommentStyle = styled.div`
+  width: 100%;
+  margin-top: 24px;
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
+  padding-left: 3px;
+
+  > div:nth-of-type(1) {
+    display: flex;
+  }
+
+  > div:nth-of-type(2) {
+    margin-top: 12px;
+    font-weight: 300;
+    line-height: 20px;
+  }
+`;
+
+export const ImageUser = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+export const CommentInformation = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  > p:nth-of-type(2) {
+    margin-top: 3px;
+    font-weight: 300;
+    font-size: 12px;
+  }
+`;
+
+export const WriteCommentStyle = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 12px;
+
+  > input {
+    width: 80%;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+
+  > div {
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: ${color.melon};
+    font-weight: 400;
+    cursor: pointer;
+  }
+`;
