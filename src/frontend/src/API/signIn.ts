@@ -12,5 +12,15 @@ export const sign_In = async (data: SignInFormType) => {
       "Content-type": "application/json; charset=UTF-8",
     },
   });
-  return (await res.json()) as SignInType;
+  const result = (await res.json()) as { token: string } & SignInType;
+  if (!("error" in result)) {
+    localStorage.setItem("token", result.token);
+  }
+  return Object.keys(result)
+    .filter((key) => key !== "token")
+    .reduce((acc, key) => {
+      // @ts-ignore
+      acc[key] = result[key];
+      return acc;
+    }, {}) as SignInType;
 };

@@ -4,6 +4,7 @@ import {
   imageUser,
   removeFavorite,
   signIn,
+  signInToken,
   signUp,
 } from "~/Controllers/user";
 
@@ -16,6 +17,8 @@ router.get("/username", getUserName);
 router.post("/signUp", signUp);
 
 router.post("/signIn", signIn);
+
+router.post("/signInToken", signInToken);
 
 router.post("/addFavorite", addFavorite);
 

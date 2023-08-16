@@ -5,6 +5,9 @@ import { encrypt } from "~/Encrypt/encrypt";
 import { decrypt } from "~/Encrypt/decrypt";
 import * as util from "util";
 import path from "path";
+import process from "process";
+
+const jwt = require("jsonwebtoken");
 
 export const getUserName = (req: Request, res: Response) => {
   connection.query("SELECT username FROM user", (error, results, fields) => {
@@ -64,12 +67,15 @@ export const signUp = async (req: Request, res: Response) => {
       values: [email],
     })) as [{ id: number }];
 
+    const accessToken = jwt.sign(userId[0].id, process.env.TOKEN);
+
     return res.json({
       id: userId[0].id,
       username: username,
       profilePath: "default.png",
       role: 0,
       favorite: [],
+      token: accessToken,
     });
   } catch (error) {
     res.status(500).json({ error: "sign up error" });
@@ -131,10 +137,43 @@ export const signIn = async (req: Request, res: Response) => {
         // @ts-ignore
         return Object.assign(acc, { [curr]: passwordResult[0][curr] });
       }, {});
-    return res.json({ ...result, favorite: favorite });
+
+    const accessToken = jwt.sign(result.id, process.env.TOKEN);
+
+    return res.json({ ...result, favorite: favorite, token: accessToken });
   } catch (error) {
     res.status(500).json({ error: "sign in error" });
   }
+};
+
+export const signInToken = async (req: Request, res: Response) => {
+  const { token } = req.body;
+
+  const userId = parseInt(jwt.verify(token, process.env.TOKEN));
+
+  const getUserInformation = util.promisify(connection.query).bind(connection);
+  const getFavorite = util.promisify(connection.query).bind(connection);
+
+  const userInformation = (await getUserInformation({
+    sql: `SELECT id, username, profilePicturePath, role
+          FROM user
+          WHERE id = ?`,
+    values: [userId],
+  })) as [
+    { id: number; username: string; profilePicturePath: string; role: number },
+  ];
+
+  const favorite = (await getFavorite({
+    sql: `SELECT hikingId
+          FROM favorite
+          WHERE userId = ?`,
+    values: [userId],
+  })) as { hikingId: number }[];
+
+  res.json({
+    ...userInformation[0],
+    favorite: favorite.map((id) => id.hikingId),
+  });
 };
 
 export const addFavorite = async (req: Request, res: Response) => {
