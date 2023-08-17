@@ -9,6 +9,7 @@ import {
   getHikingImage,
   getHikes,
   getHikesWithState,
+  updateHeader,
 } from "~/Controllers/hiking";
 
 router.get("/gpx/:hikingId", getGPX);
@@ -26,5 +27,7 @@ router.get("/getImage/:imageId", getHikingImage);
 router.get("/hikes/:categoryId", getHikes);
 
 router.get("/hikes/:categoryId/:stateId", getHikesWithState);
+
+router.put("/updateHeader", updateHeader);
 
 module.exports = router;

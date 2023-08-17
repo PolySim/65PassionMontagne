@@ -207,3 +207,43 @@ export const getHikesWithState = async (req: Request, res: Response) => {
     res.json({ error: "getHikes error" });
   }
 };
+
+export const updateHeader = async (req: Request, res: Response) => {
+  try {
+    const { title, state, difficulty, hikingId } = req.body;
+
+    const updateTitle = util.promisify(connection.query).bind(connection);
+    const updateState = util.promisify(connection.query).bind(connection);
+    const updateDifficulty = util.promisify(connection.query).bind(connection);
+
+    if (title !== "") {
+      await updateTitle({
+        sql: `UPDATE hiking
+              SET title = ?
+              WHERE id = ?`,
+        values: [title, hikingId],
+      });
+    }
+    if (state !== "-1") {
+      await updateState({
+        sql: `UPDATE hiking
+              SET state_id = ?
+              WHERE id = ?`,
+        values: [state, hikingId],
+      });
+    }
+    if (difficulty !== "-1") {
+      await updateDifficulty({
+        sql: `UPDATE hiking
+              SET difficulty = ?
+              WHERE id = ?`,
+        values: [difficulty, hikingId],
+      });
+    }
+
+    res.json({ result: "updateHeader success" });
+  } catch (error) {
+    console.log(`Update header error - ${error}`);
+    res.json({ error: "updateHeader error" });
+  }
+};

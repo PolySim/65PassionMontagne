@@ -5,8 +5,11 @@ import { HeaderForm, SelectHeader } from "@/Components/Admin/styled.ts";
 import { useEffect, useState } from "react";
 import { get_difficulty } from "@/API/getDifficulty.ts";
 import { getHikesState } from "@/API/getHikesStates.ts";
+import { useParams } from "react-router-dom";
+import { update_header } from "@/API/updateHeader.ts";
 
 const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
+  const { hikingId } = useParams();
   const { register, handleSubmit } = useForm<HeaderFormType>();
   const [states, setStates] = useState<HikesState>([
     {
@@ -33,10 +36,12 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
     };
 
     void getData();
-  }, []);
+  }, [hiking]);
 
   const onSubmit = (data: HeaderFormType) => {
-    console.log(data);
+    if (hikingId) {
+      void update_header({ ...data, hikingId: parseInt(hikingId) });
+    }
   };
 
   return (
