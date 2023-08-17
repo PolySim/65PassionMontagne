@@ -87,3 +87,9 @@ export type HikingExplore = {
   title: string;
   state_id?: number;
 };
+
+export type HeaderFormType = {
+  title: string;
+  difficulty: number;
+  state: number;
+};

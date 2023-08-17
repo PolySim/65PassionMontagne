@@ -9,22 +9,44 @@ export const AdminStyle = styled.div`
   width: 100vw;
   min-height: 82vh;
   background-color: ${color.lightYellow};
-  padding: 24px 0 48px;
+  padding: 24px 12px 48px;
 `;
 
-export const AdminCategory = styled.div`
-  width: 300px;
-  height: fit-content;
-  background-color: white;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
-  transition: transform 0.2s ease-in-out;
+export const HeaderForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
-  &:hover {
-    transform: scale(105%);
+  > input[type="text"] {
+    width: min(100%, 400px);
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 36px;
+    font-weight: 500;
+    background-color: rgba(255, 255, 255, 0.6);
   }
 
-  > div {
+  > input[type="submit"] {
+    margin-top: 24px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: ${color.melon};
+    font-weight: 400;
+    cursor: pointer;
+    width: min(100%, 150px);
+    font-size: 22px;
+    border: none;
   }
+`;
+
+export const SelectHeader = styled.select`
+  margin-top: 24px;
+  width: min(100%, 400px);
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.6);
 `;

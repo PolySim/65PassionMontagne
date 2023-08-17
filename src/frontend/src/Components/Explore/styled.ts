@@ -25,6 +25,7 @@ export const HikingExploreCardStyle = styled.div`
   box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
   transition: transform 0.2s ease-in-out;
   margin-top: 24px;
+  margin-right: 12px;
 
   &:hover {
     transform: scale(105%);

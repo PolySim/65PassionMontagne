@@ -33,7 +33,7 @@ const Admin = () => {
     <AdminStyle>
       {categories.map((category) => (
         <React.Fragment key={category.id}>
-          {category.id !== -1 ? (
+          {category.id !== -1 && (
             <HikingExploreCardStyle>
               <div>
                 <img
@@ -46,8 +46,6 @@ const Admin = () => {
                 Modifier les activités
               </ButtonExploreTopo>
             </HikingExploreCardStyle>
-          ) : (
-            <></>
           )}
         </React.Fragment>
       ))}
