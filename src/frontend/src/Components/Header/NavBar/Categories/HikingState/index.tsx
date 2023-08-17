@@ -34,9 +34,7 @@ const HikingState = ({ visible }: { visible: boolean }) => {
             src={`${API_KEY}/hiking/imageState/${hikingState.path}`}
             alt={hikingState.state}
           />
-          <StateName to={`/hiking/${hikingState.id}`}>
-            {hikingState.state}
-          </StateName>
+          <StateName to={`/1/${hikingState.id}`}>{hikingState.state}</StateName>
         </div>
       ))}
     </HikingStateStyle>

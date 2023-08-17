@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 import {
   getImages,
@@ -6,19 +6,25 @@ import {
   getImagesState,
   getHikesStates,
   getHikingInformation,
-  getHikingImage
+  getHikingImage,
+  getHikes,
+  getHikesWithState,
 } from "~/Controllers/hiking";
 
-router.get('/gpx/:hikingId', getGPX)
+router.get("/gpx/:hikingId", getGPX);
 
-router.get('/images', getImages)
+router.get("/images", getImages);
 
-router.get('/imageState/:path', getImagesState)
+router.get("/imageState/:path", getImagesState);
 
-router.get('/hikesState', getHikesStates)
+router.get("/hikesState", getHikesStates);
 
-router.get('/getHikingInformation/:hikingId', getHikingInformation)
+router.get("/getHikingInformation/:hikingId", getHikingInformation);
 
-router.get('/getImage/:imageId', getHikingImage)
+router.get("/getImage/:imageId", getHikingImage);
 
-module.exports = router
+router.get("/hikes/:categoryId", getHikes);
+
+router.get("/hikes/:categoryId/:stateId", getHikesWithState);
+
+module.exports = router;

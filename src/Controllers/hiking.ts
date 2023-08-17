@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import error_query from "~/db/error_query";
 import path from "path";
 import { QueryError } from "mysql2";
+import * as util from "util";
+import console from "console";
 
 type GPX = [
   {
@@ -157,4 +159,51 @@ export const getHikingImage = (req: Request, res: Response) => {
       );
     },
   );
+};
+
+export const getHikes = async (req: Request, res: Response) => {
+  try {
+    const categoryId = req.params.categoryId;
+
+    const getHikes = util.promisify(connection.query).bind(connection);
+
+    const hikes = (await getHikes({
+      sql: `SELECT id, main_image, title, state_id
+            FROM hiking
+            WHERE categoriesId = ?`,
+      values: [categoryId],
+    })) as {
+      id: number;
+      main_image: number;
+      title: string;
+      state_id: number | null;
+    }[];
+
+    res.json(hikes);
+  } catch (error) {
+    console.log(`error in getHikes : ${error}`);
+    res.json({ error: "getHikes error" });
+  }
+};
+
+export const getHikesWithState = async (req: Request, res: Response) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const stateId = req.params.stateId;
+
+    const getHikes = util.promisify(connection.query).bind(connection);
+
+    const hikes = (await getHikes({
+      sql: `SELECT id, main_image, title
+            FROM hiking
+            WHERE categoriesId = ?
+              AND state_id = ?`,
+      values: [categoryId, stateId],
+    })) as { id: number; main_image: number; title: string }[];
+
+    res.json(hikes);
+  } catch (error) {
+    console.log(`error in getHikes : ${error}`);
+    res.json({ error: "getHikes error" });
+  }
 };

@@ -6,7 +6,9 @@ const Footer = () => {
       <p>© Copyright - 65 Passion Montagne</p>
       <p>
         Développé et designé par{" "}
-        <a href="https://www.simondesdevises.com">Simon Desdevises</a>
+        <a href="https://www.simondesdevises.com" target="_blank">
+          Simon Desdevises
+        </a>
       </p>
     </FooterStyle>
   );

@@ -40,7 +40,7 @@ const Categories = () => {
           <Category
             onMouseEnter={() => setCategoryHover(category.id)}
             key={category.name}
-            to={`/${category.name_en}`}
+            to={`/${category.id}`}
           >
             {category.name}
           </Category>
