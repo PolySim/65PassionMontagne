@@ -3,7 +3,7 @@ import Categories from "@/Components/Header/NavBar/Categories";
 import Connection from "@/Components/Header/NavBar/Connection";
 import { useContext } from "react";
 import { MainContext } from "@/context.ts";
-import LogOut from "src/Components/Header/NavBar/LogOut";
+import LogOut from "@/Components/Header/NavBar/LogOut";
 
 const NavBar = () => {
   const { user } = useContext(MainContext);
