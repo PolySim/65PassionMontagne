@@ -26,10 +26,37 @@ const WriteComment = ({
 
   const sendComment = (element: HTMLInputElement | null) => {
     if (element && user) {
-      void write_comment(element.value, user.id, hikingId);
+      const content = element.value;
+      void write_comment(content, user.id, hikingId);
+      const date = new Date();
+
+      // Tableau de noms de mois en français
+      const mois = [
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre",
+      ];
+
+      // Construction de la date sous forme de chaîne
+      const dateString =
+        date.getDate() + " " + mois[date.getMonth()] + " " + date.getFullYear();
       setComments((curr) => [
         ...curr,
-        { content: element.value, userId: user.id, username: user.username },
+        {
+          content: content,
+          userId: user.id,
+          username: user.username,
+          date: dateString,
+        },
       ]);
       element.value = "";
     }

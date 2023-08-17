@@ -51,17 +51,23 @@ export const getComments = async (req: Request, res: Response) => {
     const getCommentsQuery = util.promisify(connection.query).bind(connection);
 
     const commentsResult = (await getCommentsQuery({
-      sql: `SELECT content, userid, username
+      sql: `SELECT content, userid, username, date
             FROM Comments
                      JOIN user ON user.id = Comments.userid
             WHERE hikingId = ?`,
       values: [hikingId],
-    })) as { content: string; userid: number; username: string }[];
+    })) as {
+      content: string;
+      userid: number;
+      username: string;
+      date: string;
+    }[];
 
     const commentsRefactor = commentsResult.map((comment) => ({
       content: comment.content,
       userId: comment.userid,
       username: comment.username,
+      date: comment.date,
     }));
 
     res.json(commentsRefactor);

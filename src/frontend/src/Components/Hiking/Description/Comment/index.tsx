@@ -21,7 +21,7 @@ const Comment = ({ comment }: { comment: CommentsType[0] }) => {
         </ImageUser>
         <CommentInformation>
           <p>{comment.username}</p>
-          <p>10 août 2023</p>
+          <p>{comment.date}</p>
         </CommentInformation>
       </div>
       <div>{comment.content}</div>

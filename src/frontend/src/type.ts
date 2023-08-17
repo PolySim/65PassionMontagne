@@ -78,4 +78,5 @@ export type CommentsType = {
   content: string;
   userId: number;
   username: string;
+  date: string;
 }[];
