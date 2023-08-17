@@ -2,7 +2,6 @@ import { HikingStateStyle, StateName } from "@/Components/Header/styled.ts";
 import { useEffect, useState } from "react";
 import { HikesState } from "@/type.ts";
 import { getHikesState } from "@/API/getHikesStates.ts";
-// import { hikesStates } from "@/Components/Header/NavBar/Categories/HikingState/hikingState.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD

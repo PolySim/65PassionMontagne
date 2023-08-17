@@ -308,7 +308,7 @@ export const StateName = styled(Link)`
   background-color: rgba(0, 0, 0, 0.3);
 `;
 
-export const ProfileButtonStyle = styled.div`
+export const LotOut = styled.div`
   padding: 6px 12px;
   margin-left: 12px;
   border-radius: 12px;
