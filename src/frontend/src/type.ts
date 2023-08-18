@@ -99,3 +99,8 @@ export type StatisticalFormType = {
   elevation: number;
   time: string;
 };
+
+export type ContentFormType = {
+  description: string;
+  indication: string;
+};

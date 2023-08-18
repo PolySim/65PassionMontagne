@@ -270,3 +270,35 @@ export const updateStatistical = async (req: Request, res: Response) => {
     res.json({ error: "update statistical error" });
   }
 };
+
+export const updateContent = async (req: Request, res: Response) => {
+  try {
+    const { indication, description, hikingId } = req.body;
+
+    const updateDescriptionQuery = util
+      .promisify(connection.query)
+      .bind(connection);
+    const updateIndicationQuery = util
+      .promisify(connection.query)
+      .bind(connection);
+
+    if (indication !== "") {
+      await updateIndicationQuery({
+        sql: "UPDATE hiking SET indication = ? WHERE id = ?",
+        values: [indication, hikingId],
+      });
+    }
+
+    if (description !== "") {
+      await updateIndicationQuery({
+        sql: "UPDATE hiking SET content = ? WHERE id = ?",
+        values: [description, hikingId],
+      });
+    }
+
+    res.json({ result: "update content success" });
+  } catch (error) {
+    console.log(`update content error - ${error}`);
+    res.json({ error: "update content error" });
+  }
+};

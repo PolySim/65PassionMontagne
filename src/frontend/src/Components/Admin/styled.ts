@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { color } from "@/const_style.ts";
+import { HikingResume } from "@/Components/Hiking/styled.ts";
 
 export const AdminStyle = styled.div`
   display: flex;
@@ -73,6 +74,32 @@ export const EditStatistical = styled.form`
     border: 1px solid #ccc;
     outline: none;
     width: 100px;
+  }
+
+  input[type="submit"] {
+    margin-top: 12px;
+    margin-left: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: ${color.orange};
+    font-weight: 400;
+    cursor: pointer;
+    width: min(100%, 250px);
+    font-size: 16px;
+    border: none;
+  }
+`;
+
+export const EditHikingContent = styled(HikingResume)`
+  textarea {
+    margin-top: 12px;
+    width: 100%;
+    min-height: 300px;
+    resize: vertical;
+    outline: none;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
   }
 
   input[type="submit"] {

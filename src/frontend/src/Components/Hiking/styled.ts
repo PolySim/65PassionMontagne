@@ -156,7 +156,8 @@ export const HikingResume = styled.div`
     margin-left: 24px;
   }
 
-  p {
+  p,
+  textarea {
     border-top: 1px solid #ccc;
     line-height: 24px;
     padding-top: 12px;
