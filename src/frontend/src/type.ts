@@ -93,3 +93,9 @@ export type HeaderFormType = {
   difficulty: number;
   state: number;
 };
+
+export type StatisticalFormType = {
+  distance: number;
+  elevation: number;
+  time: string;
+};

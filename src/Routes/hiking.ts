@@ -10,6 +10,7 @@ import {
   getHikes,
   getHikesWithState,
   updateHeader,
+  updateStatistical,
 } from "~/Controllers/hiking";
 
 router.get("/gpx/:hikingId", getGPX);
@@ -29,5 +30,7 @@ router.get("/hikes/:categoryId", getHikes);
 router.get("/hikes/:categoryId/:stateId", getHikesWithState);
 
 router.put("/updateHeader", updateHeader);
+
+router.put("/updateStatistical", updateStatistical);
 
 module.exports = router;

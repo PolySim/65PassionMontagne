@@ -247,3 +247,26 @@ export const updateHeader = async (req: Request, res: Response) => {
     res.json({ error: "updateHeader error" });
   }
 };
+
+export const updateStatistical = async (req: Request, res: Response) => {
+  try {
+    const { distance, time, elevation, hikingId } = req.body;
+
+    const updateStatisticalQuery = util
+      .promisify(connection.query)
+      .bind(connection);
+
+    await updateStatisticalQuery({
+      sql: `UPDATE hiking
+            SET length    = ?,
+                duration  = ?,
+                elevation = ?
+            WHERE id = ?`,
+      values: [distance, time, elevation, hikingId],
+    });
+    res.json({ result: "update statistical success" });
+  } catch (error) {
+    console.log(`update statistical error - ${error}`);
+    res.json({ error: "update statistical error" });
+  }
+};

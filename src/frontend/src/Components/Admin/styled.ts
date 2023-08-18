@@ -50,3 +50,41 @@ export const SelectHeader = styled.select`
   outline: none;
   background-color: rgba(255, 255, 255, 0.6);
 `;
+
+export const EditStatistical = styled.form`
+  padding-bottom: 24px;
+
+  p {
+    font-weight: 300;
+    margin-bottom: 6px;
+  }
+
+  > div:nth-of-type(1) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 100px;
+  }
+
+  input[type="submit"] {
+    margin-top: 12px;
+    margin-left: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: ${color.orange};
+    font-weight: 400;
+    cursor: pointer;
+    width: min(100%, 250px);
+    font-size: 16px;
+    border: none;
+  }
+`;

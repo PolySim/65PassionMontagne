@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HikingInformation } from "@/type.ts";
 import { get_hiking_information } from "@/API/getHikingInformation.ts";
-import DescriptionHiking from "@/Components/Hiking/Description";
 import HikingLocation from "@/Components/Hiking/Location";
 import EditHeader from "@/Components/Admin/EditHiking/Herder";
+import EditDescription from "@/Components/Admin/EditHiking/Description";
 
 const EditHiking = () => {
   const { hikingId } = useParams();
@@ -38,7 +38,7 @@ const EditHiking = () => {
       <div>
         <EditHeader hiking={hiking} />
         <HikingContent>
-          <DescriptionHiking hiking={hiking} />
+          <EditDescription hiking={hiking} />
           <HikingLocation hiking={hiking} />
         </HikingContent>
       </div>
