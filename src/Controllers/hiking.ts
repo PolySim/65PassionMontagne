@@ -13,17 +13,22 @@ type GPX = [
 ];
 
 export const getGPX = (req: Request, res: Response) => {
-  const hikingId = req.params.hikingId;
-  connection.query(
-    `SELECT path
-     FROM GPX
-     WHERE hikingId = ${hikingId}`,
-    (error: QueryError, results: GPX) => {
-      error_query(error, res);
-      const gpx = results[0].path;
-      res.sendFile(path.join(__dirname, `../data/gpx/${gpx}`));
-    },
-  );
+  try {
+    const hikingId = req.params.hikingId;
+    connection.query(
+      `SELECT path
+       FROM GPX
+       WHERE hikingId = ${hikingId}`,
+      (error: QueryError, results: GPX) => {
+        error_query(error, res);
+        const gpx = results[0].path;
+        res.sendFile(path.join(__dirname, `../data/gpx/${gpx}`));
+      },
+    );
+  } catch (error) {
+    console.log("Get gpx - error");
+    res.json("Get gpx error");
+  }
 };
 
 type Images = {

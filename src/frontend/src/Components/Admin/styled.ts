@@ -115,3 +115,5 @@ export const EditHikingContent = styled(HikingResume)`
     border: none;
   }
 `;
+
+export const EditImagesStyle = styled.div``;
