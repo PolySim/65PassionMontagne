@@ -333,7 +333,29 @@ export const reorderImages = async (req: Request, res: Response) => {
 
 export const downloadImages = async (req: Request, res: Response) => {
   try {
-    console.log(req.fileName);
+    if (req.fileName) {
+      const uploadImageQuery = util
+        .promisify(connection.query)
+        .bind(connection);
+      const getMaxNumber = util.promisify(connection.query).bind(connection);
+
+      const maxNumber = (await getMaxNumber({
+        sql: `SELECT Max(order_image)
+              FROM images
+              WHERE hikingId = ?`,
+        values: [req.params.hikingId],
+      })) as [{ "Max(order_image)": number }];
+
+      const max = maxNumber[0]["Max(order_image)"];
+
+      req.fileName.forEach((image, index) => {
+        uploadImageQuery({
+          sql: `INSERT INTO images (path, hikingId, order_image)
+                VALUES (?, ?, ?)`,
+          values: [image, req.params.hikingId, max + index],
+        });
+      });
+    }
     res.json({ result: "success" });
   } catch (error) {
     console.log("download image error");

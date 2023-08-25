@@ -13,6 +13,7 @@ import { AddFiles } from "@/Components/Admin/styled.ts";
 import { useForm } from "react-hook-form";
 import { download_images } from "@/API/downloadImages.ts";
 import { useParams } from "react-router-dom";
+import { get_hiking_information } from "@/API/getHikingInformation.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -60,6 +61,10 @@ export const EditImages = ({
       formData.append("hikingId", hikingId);
       try {
         void (await download_images(formData, parseInt(hikingId)));
+        const newHikingInformation = await get_hiking_information(
+          parseInt(hikingId),
+        );
+        setHiking(newHikingInformation);
       } catch (error) {
         console.log(error);
       }

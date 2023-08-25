@@ -23,7 +23,7 @@ const router = express.Router();
 
 declare module "express" {
   interface Request {
-    fileName?: string;
+    fileName?: string[];
   }
 }
 
@@ -34,9 +34,8 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req: Request, file, cb) => {
-    // cb(null, file.originalname);
     const fileName = Date.now() + path.extname(file.originalname);
-    req.fileName = fileName;
+    req.fileName = req.fileName ? [...req.fileName, fileName] : [fileName];
     cb(null, fileName);
   },
 });
