@@ -330,3 +330,13 @@ export const reorderImages = async (req: Request, res: Response) => {
     res.json({ error: "reorder error" });
   }
 };
+
+export const downloadImages = async (req: Request, res: Response) => {
+  try {
+    console.log(req.fileName);
+    res.json({ result: "success" });
+  } catch (error) {
+    console.log("download image error");
+    res.json({ error: "download image error" });
+  }
+};

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color } from "@/const_style.ts";
+import { color, font } from "@/const_style.ts";
 import { HikingResume } from "@/Components/Hiking/styled.ts";
 
 export const AdminStyle = styled.div`
@@ -116,4 +116,16 @@ export const EditHikingContent = styled(HikingResume)`
   }
 `;
 
-export const EditImagesStyle = styled.div``;
+export const AddFiles = styled.form`
+  width: 100%;
+
+  input[type="submit"] {
+    margin-top: 12px;
+    padding: 3px 12px;
+    border-radius: 10px;
+    border: none;
+    background-color: ${color.melon};
+    font-weight: 400;
+    font-family: ${font.rubik};
+  }
+`;

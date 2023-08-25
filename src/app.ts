@@ -24,7 +24,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "10mb" }));
+// app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use("/HelloWorld", helloWorldRoutes);
 app.use("/user", userRoutes);
