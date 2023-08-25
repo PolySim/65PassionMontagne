@@ -12,6 +12,7 @@ import {
   updateHeader,
   updateStatistical,
   updateContent,
+  reorderImages,
 } from "~/Controllers/hiking";
 
 router.get("/gpx/:hikingId", getGPX);
@@ -35,5 +36,7 @@ router.put("/updateHeader", updateHeader);
 router.put("/updateStatistical", updateStatistical);
 
 router.put("/updateContent", updateContent);
+
+router.put("/reorderImages", reorderImages);
 
 module.exports = router;

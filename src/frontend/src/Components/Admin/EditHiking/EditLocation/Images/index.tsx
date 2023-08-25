@@ -9,6 +9,7 @@ import {
 } from "react-beautiful-dnd";
 import React, { useEffect, useState } from "react";
 import { reorderImages } from "@/Components/Admin/EditHiking/EditLocation/Images/reorderImage.ts";
+import { reorder_images } from "@/API/reorderImage.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -27,13 +28,21 @@ export const EditImages = ({
     setState((curr) => curr + 1);
   }, []);
   const onDragEnd = (result: DropResult) => {
-    console.log(
+    void reorder_images(
       reorderImages(
         hiking.images,
         result.source.index,
         result.destination?.index,
       ),
     );
+    setHiking((curr) => ({
+      ...curr,
+      images: reorderImages(
+        hiking.images,
+        result.source.index,
+        result.destination?.index,
+      ),
+    }));
   };
 
   return (

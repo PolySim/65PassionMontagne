@@ -125,7 +125,9 @@ export const getHikingInformation = (req: Request, res: Response) => {
   connection.query(
     `SELECT id
      FROM images
-     WHERE hikingId = ${hikingId}`,
+     WHERE hikingId = ${hikingId}
+     ORDER BY order_image
+    `,
     (error, results: HikingImage) => {
       error_query(error, res);
       const images = results.reduce(
@@ -305,5 +307,26 @@ export const updateContent = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(`update content error - ${error}`);
     res.json({ error: "update content error" });
+  }
+};
+
+export const reorderImages = async (req: Request, res: Response) => {
+  try {
+    const { images }: { images: number[] } = req.body;
+
+    const reorderQuery = util.promisify(connection.query).bind(connection);
+
+    for (let i = 0; i < images.length; i++) {
+      await reorderQuery({
+        sql: `UPDATE images
+              SET order_image = ?
+              WHERE id = ?`,
+        values: [i + 1, images[i]],
+      });
+    }
+    res.json({ result: "reorder image success" });
+  } catch (error) {
+    console.log(`reorder error : ${error}`);
+    res.json({ error: "reorder error" });
   }
 };

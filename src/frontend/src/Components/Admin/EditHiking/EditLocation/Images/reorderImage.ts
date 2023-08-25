@@ -3,7 +3,7 @@ export const reorderImages: (
   source: number,
   destination: number | undefined,
 ) => number[] = (images, source, destination) => {
-  if (destination) {
+  if (destination !== undefined) {
     const image = images.find((_image, i) => source === i);
     if (image === undefined) {
       return images;

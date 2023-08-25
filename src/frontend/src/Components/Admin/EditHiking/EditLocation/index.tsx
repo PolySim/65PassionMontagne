@@ -56,7 +56,7 @@ const EditLocation = ({
           positions={positions}
         />
       </Map>
-      <EditImages hiking={hiking}></EditImages>
+      <EditImages setHiking={setHiking} hiking={hiking}></EditImages>
     </LocationHiking>
   );
 };
