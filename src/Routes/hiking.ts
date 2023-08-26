@@ -15,6 +15,7 @@ import {
   downloadImages,
   updateMainImage,
   deleteImage,
+  uploadNewGpx,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -26,10 +27,11 @@ const router = express.Router();
 declare module "express" {
   interface Request {
     fileName?: string[];
+    gpxFileName?: string;
   }
 }
 
-const storage = multer.diskStorage({
+const storageImage = multer.diskStorage({
   destination: (req, file, cb) => {
     const hikingId = req.params.hikingId;
     const uploadPath = path.join(__dirname, "../data/hiking_image", hikingId);
@@ -42,7 +44,22 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const uploadImage = multer({ storage: storageImage });
+
+const storageGpx = multer.diskStorage({
+  destination: (req, file, cb) => {
+    console.log(1);
+    const hikingId = req.params.hikingId;
+    const uploadPath = path.join(__dirname, "../data/GPX");
+    cb(null, uploadPath);
+  },
+  filename: (req: Request, file, cb) => {
+    req.gpxFileName = file.originalname;
+    cb(null, file.originalname);
+  },
+});
+
+const uploadGpx = multer({ storage: storageGpx });
 
 router.get("/gpx/:hikingId", getGPX);
 
@@ -70,12 +87,14 @@ router.put("/reorderImages", reorderImages);
 
 router.post(
   "/downloadImages/:hikingId",
-  upload.array("images", 12),
+  uploadImage.array("images", 12),
   downloadImages,
 );
 
 router.put("/updateMainImage", updateMainImage);
 
 router.delete("/deleteImage", deleteImage);
+
+router.post("/uploadGpx/:hikingId", uploadGpx.single("gpx"), uploadNewGpx);
 
 module.exports = router;

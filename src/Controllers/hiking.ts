@@ -425,3 +425,40 @@ export const deleteImage = async (req: Request, res: Response) => {
     res.json({ error: "delete image error" });
   }
 };
+
+export const uploadNewGpx = async (req: Request, res: Response) => {
+  try {
+    const hikingId = req.params.hikingId;
+    const gpxName = req.gpxFileName;
+
+    if (!gpxName) {
+      res.json({ error: "upload new gpx error with gpxName" });
+      return;
+    }
+
+    const getLastName = util.promisify(connection.query).bind(connection);
+    const updatePath = util.promisify(connection.query).bind(connection);
+
+    const lastName = (await getLastName({
+      sql: `SELECT path
+            FROM GPX
+            WHERE hikingId = ?`,
+      values: [hikingId],
+    })) as [{ path: string }];
+
+    await updatePath({
+      sql: `UPDATE gpx
+            SET path = ?
+            WHERE id = ?`,
+      values: [gpxName, hikingId],
+    });
+
+    const fullPath = path.join(__dirname, "../data/GPX", lastName[0].path);
+    fs.unlinkSync(fullPath);
+
+    res.json({ result: "upload new gpx success" });
+  } catch (error) {
+    console.log(`upload new gpx error: ${error}`);
+    res.json({ error: "upload new gpx error" });
+  }
+};

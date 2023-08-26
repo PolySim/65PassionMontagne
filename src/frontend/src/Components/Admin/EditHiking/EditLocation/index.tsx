@@ -8,6 +8,7 @@ import EditImages from "@/Components/Admin/EditHiking/EditLocation/Images";
 import { HikingInformation } from "@/type.ts";
 import { AddFiles } from "@/Components/Admin/styled.ts";
 import { useForm } from "react-hook-form";
+import { upload_gpx } from "@/API/uploadNewGpx.ts";
 
 const EditLocation = ({
   hiking,
@@ -20,9 +21,15 @@ const EditLocation = ({
   const [positions, setPositions] = useState<[number, number][]>([[0, 0]]);
   const [positionCenter, setPositionCenter] = useState([0, 0]);
   const formRef = useRef<HTMLFormElement>(null);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<{ gpx: FileList }>();
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: { gpx: FileList }) => {
+    if (data.gpx.length && hikingId) {
+      const formData = new FormData();
+      formData.append("gpx", data.gpx[0]);
+      void upload_gpx(formData, parseInt(hikingId));
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -63,7 +70,7 @@ const EditLocation = ({
         />
       </Map>
       <AddFiles $gpx ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-        <input type="file" multiple {...register("images")} accept=".gpx" />
+        <input type="file" {...register("gpx")} accept=".gpx" />
         <input type="submit" value="Valider" />
       </AddFiles>
       <EditImages setHiking={setHiking} hiking={hiking}></EditImages>

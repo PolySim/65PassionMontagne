@@ -61,7 +61,6 @@ export const EditImages = ({
       for (let i = 0; i < data.images.length; i++) {
         formData.append(`images`, data.images[i]);
       }
-      formData.append("hikingId", hikingId);
       try {
         void (await download_images(formData, parseInt(hikingId)));
         const newHikingInformation = await get_hiking_information(
