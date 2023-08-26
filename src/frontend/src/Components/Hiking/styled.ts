@@ -212,7 +212,7 @@ export const LocationHiking = styled.div`
   height: max-content;
   border-left: 1px solid #ccc;
   margin-left: 24px;
-  padding: 24px 0 0 24px;
+  padding: 24px 0 48px 24px;
 `;
 
 export const Map = styled(MapContainer)`

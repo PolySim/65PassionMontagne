@@ -23,6 +23,9 @@ export const getGPX = (req: Request, res: Response) => {
       (error: QueryError, results: GPX) => {
         error_query(error, res);
         const gpx = results[0].path;
+
+        res.setHeader("Content-Disposition", `attachment; filename=${gpx}`);
+        res.setHeader("Content-Type", "application/gpx+xml");
         res.sendFile(path.join(__dirname, `../data/gpx/${gpx}`));
       },
     );

@@ -116,8 +116,9 @@ export const EditHikingContent = styled(HikingResume)`
   }
 `;
 
-export const AddFiles = styled.form`
+export const AddFiles = styled.form<{ $gpx?: boolean }>`
   width: 100%;
+  margin-top: ${(props) => (props.$gpx ? "24px" : "0")};
 
   input[type="submit"] {
     margin-top: 12px;
@@ -127,7 +128,6 @@ export const AddFiles = styled.form`
     background-color: ${color.melon};
     font-weight: 400;
     font-family: ${font.rubik};
-    margin-bottom: 50px;
   }
 `;
 

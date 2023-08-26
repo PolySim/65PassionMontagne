@@ -1,11 +1,13 @@
 import { LocationHiking, Map } from "@/Components/Hiking/styled.ts";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { get_gpx } from "@/API/getGpx.ts";
 import gpxParser from "gpxparser";
 import { Polyline, TileLayer } from "react-leaflet";
 import EditImages from "@/Components/Admin/EditHiking/EditLocation/Images";
 import { HikingInformation } from "@/type.ts";
+import { AddFiles } from "@/Components/Admin/styled.ts";
+import { useForm } from "react-hook-form";
 
 const EditLocation = ({
   hiking,
@@ -17,6 +19,10 @@ const EditLocation = ({
   const { hikingId } = useParams();
   const [positions, setPositions] = useState<[number, number][]>([[0, 0]]);
   const [positionCenter, setPositionCenter] = useState([0, 0]);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = () => {};
 
   useEffect(() => {
     const getData = async () => {
@@ -56,6 +62,10 @@ const EditLocation = ({
           positions={positions}
         />
       </Map>
+      <AddFiles $gpx ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+        <input type="file" multiple {...register("images")} accept=".gpx" />
+        <input type="submit" value="Valider" />
+      </AddFiles>
       <EditImages setHiking={setHiking} hiking={hiking}></EditImages>
     </LocationHiking>
   );
