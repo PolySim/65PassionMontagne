@@ -5,6 +5,7 @@ import path from "path";
 import { QueryError } from "mysql2";
 import * as util from "util";
 import console from "console";
+import fs from "fs";
 
 type GPX = [
   {
@@ -382,5 +383,42 @@ export const updateMainImage = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(`error in edit Main Image : ${error}`);
     res.json({ error: "Edit Main Image" });
+  }
+};
+
+export const deleteImage = async (req: Request, res: Response) => {
+  try {
+    const { imageId, hikingId } = req.body;
+
+    const getImagePath = util.promisify(connection.query).bind(connection);
+    const deleteInDB = util.promisify(connection.query).bind(connection);
+
+    const filePath = (await getImagePath({
+      sql: `SELECT path
+            FROM images
+            WHERE id = ?`,
+      values: [imageId],
+    })) as [{ path: string }];
+
+    const fullPath = path.join(
+      __dirname,
+      "../data/hiking_image",
+      hikingId.toString(),
+      filePath[0].path,
+    );
+
+    await deleteInDB({
+      sql: `DELETE
+            FROM images
+            WHERE id = ?`,
+      values: [imageId],
+    });
+
+    fs.unlinkSync(fullPath);
+
+    res.json({ result: "image delete with success" });
+  } catch (error) {
+    console.log(`delete image error : ${error}`);
+    res.json({ error: "delete image error" });
   }
 };

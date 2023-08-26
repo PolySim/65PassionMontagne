@@ -5,6 +5,7 @@ import Garbage from "@/Components/SVG/Garbage.tsx";
 import MainImage from "@/Components/SVG/MainImage.tsx";
 import { update_main_image } from "@/API/updateMainImage.ts";
 import { useParams } from "react-router-dom";
+import { delete_image } from "@/API/deleteImage.ts";
 
 const EditImage = ({
   imageId,
@@ -24,9 +25,19 @@ const EditImage = ({
     }
   };
 
+  const handleDelete = () => {
+    if (hikingId) {
+      setHiking((curr) => ({
+        ...curr,
+        images: curr.images.filter((image) => image !== imageId),
+      }));
+      void delete_image(parseInt(hikingId), imageId);
+    }
+  };
+
   return (
     <ActionImageHiking $selected={selected}>
-      <div>
+      <div onClick={handleDelete}>
         <Garbage />
       </div>
       <div onClick={handleMainImage}>

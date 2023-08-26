@@ -14,6 +14,7 @@ import {
   reorderImages,
   downloadImages,
   updateMainImage,
+  deleteImage,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -74,5 +75,7 @@ router.post(
 );
 
 router.put("/updateMainImage", updateMainImage);
+
+router.delete("/deleteImage", deleteImage);
 
 module.exports = router;
