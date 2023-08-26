@@ -30,7 +30,7 @@ export const getGPX = (req: Request, res: Response) => {
 
         res.setHeader("Content-Disposition", `attachment; filename=${gpx}`);
         res.setHeader("Content-Type", "application/gpx+xml");
-        res.sendFile(path.join(__dirname, `../data/gpx/${gpx}`));
+        res.sendFile(path.join(__dirname, `../data/GPX/${gpx}`));
       },
     );
   } catch (error) {

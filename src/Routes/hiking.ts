@@ -87,8 +87,9 @@ const storageGpx = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req: Request, file, cb) => {
-    req.gpxFileName = file.originalname;
-    cb(null, file.originalname);
+    const gpxFileName = Date.now() + file.originalname;
+    req.gpxFileName = gpxFileName;
+    cb(null, gpxFileName);
   },
 });
 
