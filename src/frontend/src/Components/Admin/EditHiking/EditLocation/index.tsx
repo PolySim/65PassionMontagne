@@ -25,7 +25,7 @@ const EditLocation = ({
   const { register, handleSubmit } = useForm<{ gpx: FileList }>();
 
   const onSubmit = async (data: { gpx: FileList }) => {
-    if (data.gpx.length && hikingId) {
+    if (data.gpx.length && hikingId && hikingId !== "-1") {
       const formData = new FormData();
       formData.append("gpx", data.gpx[0]);
       void (await upload_gpx(formData, parseInt(hikingId)));
@@ -35,7 +35,7 @@ const EditLocation = ({
 
   useEffect(() => {
     const getData = async () => {
-      if (hikingId) {
+      if (hikingId && hikingId !== "-1") {
         const data = await get_gpx(parseInt(hikingId));
         const parser = new gpxParser();
         parser.parse(data);
@@ -72,7 +72,12 @@ const EditLocation = ({
         />
       </Map>
       <AddFiles $gpx ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-        <input type="file" {...register("gpx")} accept=".gpx" />
+        <input
+          disabled={hikingId === "-1"}
+          type="file"
+          {...register("gpx")}
+          accept=".gpx"
+        />
         <input type="submit" value="Valider" />
       </AddFiles>
       <EditImages setHiking={setHiking} hiking={hiking}></EditImages>

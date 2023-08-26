@@ -16,6 +16,7 @@ import {
   updateMainImage,
   deleteImage,
   uploadNewGpx,
+  createAlbum,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -94,5 +95,7 @@ router.put("/updateMainImage", updateMainImage);
 router.delete("/deleteImage", deleteImage);
 
 router.post("/uploadGpx/:hikingId", uploadGpx.single("gpx"), uploadNewGpx);
+
+router.post("/createAlbum", createAlbum);
 
 module.exports = router;

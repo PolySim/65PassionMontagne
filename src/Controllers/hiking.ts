@@ -155,21 +155,26 @@ type SendHikingImage = [
 ];
 
 export const getHikingImage = (req: Request, res: Response) => {
-  const imageId = req.params.imageId;
-  connection.query(
-    `SELECT path, hikingId
-     FROM images
-     WHERE id = ${imageId}`,
-    (error, results: SendHikingImage) => {
-      error_query(error, res);
-      res.sendFile(
-        path.join(
-          __dirname,
-          `../data/hiking_image/${results[0].hikingId}/${results[0].path}`,
-        ),
-      );
-    },
-  );
+  try {
+    const imageId = req.params.imageId;
+    connection.query(
+      `SELECT path, hikingId
+       FROM images
+       WHERE id = ${imageId}`,
+      (error, results: SendHikingImage) => {
+        error_query(error, res);
+        res.sendFile(
+          path.join(
+            __dirname,
+            `../data/hiking_image/${results[0].hikingId}/${results[0].path}`,
+          ),
+        );
+      },
+    );
+  } catch (error) {
+    console.log(`error in send image : ${error}`);
+    res.json({ error: "error in send image" });
+  }
 };
 
 export const getHikes = async (req: Request, res: Response) => {
@@ -462,5 +467,31 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(`upload new gpx error: ${error}`);
     res.json({ error: "upload new gpx error" });
+  }
+};
+
+export const createAlbum = async (req: Request, res: Response) => {
+  try {
+    const { title, difficulty, state, categoryId } = req.body;
+
+    const getMaxId = util.promisify(connection.query).bind(connection);
+    const createAlbumQuery = util.promisify(connection.query).bind(connection);
+
+    await createAlbumQuery({
+      sql: `INSERT INTO hiking (title, categoriesId, content, state_id, difficulty, length, elevation,
+                                duration, indication)
+            VALUES (?, ?, '', ?, ?, 0, 0, '', '')`,
+      values: [title, categoryId, state, difficulty],
+    });
+
+    const maxId = (await getMaxId({
+      sql: `SELECT MAX(id)
+            FROM hiking`,
+    })) as [{ "MAX(id)": number }];
+
+    res.json({ hikingId: maxId[0]["MAX(id)"] });
+  } catch (error) {
+    console.log(`error in create album - ${error}`);
+    res.json({ error: "error in create album" });
   }
 };

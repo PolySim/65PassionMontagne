@@ -11,15 +11,15 @@ const EditHiking = () => {
   const { hikingId } = useParams();
   const [hiking, setHiking] = useState<HikingInformation>({
     content: "",
-    images: [1],
-    main_image: 1,
-    state: "",
+    images: [],
+    main_image: -1,
+    state: "1",
     title: "",
-    difficulty: "",
+    difficulty: "1",
     elevation: 0,
     length: 0,
     indication: "",
-    duration: "",
+    duration: "0 h 00",
   });
 
   useEffect(() => {

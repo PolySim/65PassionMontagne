@@ -7,13 +7,14 @@ import { get_difficulty } from "@/API/getDifficulty.ts";
 import { getHikesState } from "@/API/getHikesStates.ts";
 import { useParams } from "react-router-dom";
 import { update_header } from "@/API/updateHeader.ts";
+import { create_album } from "@/API/createAlbum.ts";
 
 const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
-  const { hikingId } = useParams();
+  const { hikingId, categoryId } = useParams();
   const { register, handleSubmit } = useForm<HeaderFormType>();
   const [states, setStates] = useState<HikesState>([
     {
-      id: -1,
+      id: 1,
       state: "",
       path: "",
     },
@@ -22,7 +23,7 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
     { id: number; difficulty: string }[]
   >([
     {
-      id: -1,
+      id: 1,
       difficulty: "",
     },
   ]);
@@ -38,9 +39,18 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
     void getData();
   }, [hiking]);
 
-  const onSubmit = (data: HeaderFormType) => {
-    if (hikingId) {
-      void update_header({ ...data, hikingId: parseInt(hikingId) });
+  const onSubmit = async (data: HeaderFormType) => {
+    if (hikingId && hikingId !== "-1") {
+      void (await update_header({ ...data, hikingId: parseInt(hikingId) }));
+    } else if (hikingId === "-1" && categoryId) {
+      const newHikingId = await create_album({
+        ...data,
+        categoryId: parseInt(categoryId),
+      });
+      if ("hikingId" in newHikingId) {
+        const newUrl = `/admin/${categoryId}/${newHikingId.hikingId}`;
+        window.history.replaceState({}, "", newUrl);
+      }
     }
   };
 
@@ -51,6 +61,7 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
           type="text"
           defaultValue={hiking.title}
           placeholder="Titre de l'activité"
+          required
           {...register("title")}
         />
         <SelectHeader

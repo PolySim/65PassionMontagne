@@ -27,7 +27,7 @@ export const EditImages = ({
   hiking: HikingInformation;
   setHiking: React.Dispatch<React.SetStateAction<HikingInformation>>;
 }) => {
-  const [isDraging, setIsDraging] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const [state, setState] = useState(0);
   const { register, handleSubmit } = useForm<{ images: FileList }>();
   const formRef = useRef<HTMLFormElement>(null);
@@ -37,7 +37,7 @@ export const EditImages = ({
     setState((curr) => curr + 1);
   }, []);
   const onDragEnd = (result: DropResult) => {
-    setIsDraging(false);
+    setIsDragging(false);
     void reorder_images(
       reorderImages(
         hiking.images,
@@ -77,7 +77,7 @@ export const EditImages = ({
     <DragDropContext
       onDragEnd={onDragEnd}
       onDragStart={() => {
-        setIsDraging(true);
+        setIsDragging(true);
       }}
     >
       <Droppable droppableId={"droppable"} key={state}>
@@ -85,7 +85,7 @@ export const EditImages = ({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            style={{ marginBottom: isDraging ? "200px" : "0" }}
+            style={{ marginBottom: isDragging ? "200px" : "0" }}
           >
             {hiking.images.map((imageId, i) => (
               <Draggable draggableId={`${imageId}`} index={i} key={imageId}>
@@ -117,6 +117,7 @@ export const EditImages = ({
           multiple
           {...register("images")}
           accept="image/png, image/jpeg"
+          disabled={hikingId === "-1"}
         />
         <input type="submit" value="Valider" />
       </AddFiles>

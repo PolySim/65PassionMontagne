@@ -104,3 +104,13 @@ export type ContentFormType = {
   description: string;
   indication: string;
 };
+
+export type CreateAlbumProps = (props: {
+  title: string;
+  difficulty: number;
+  state: number;
+  categoryId: number;
+}) => Promise<{
+  hikingId?: number;
+  error?: string;
+}>;

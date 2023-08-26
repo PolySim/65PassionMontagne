@@ -34,8 +34,11 @@ export const HeaderHikingStyle = styled.div<{
   overflow: hidden;
   width: 100%;
   height: 350px;
+  background-color: gray;
   background-image: ${(props) =>
-    `url(${API_KEY}/hiking/getImage/${props.$main_image})`};
+    props.$main_image === -1 || !props.$main_image
+      ? "none"
+      : `url(${API_KEY}/hiking/getImage/${props.$main_image})`};
   background-size: cover;
   background-position: center;
 

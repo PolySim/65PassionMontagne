@@ -41,7 +41,11 @@ const Statistical = ({ hiking }: { hiking: HikingInformation }) => {
           <input {...register("time")} type="text" />
         </div>
       </div>
-      <input type="submit" value="valider les statistiques" />
+      <input
+        type="submit"
+        disabled={hikingId === "-1"}
+        value="valider les statistiques"
+      />
     </EditStatistical>
   );
 };

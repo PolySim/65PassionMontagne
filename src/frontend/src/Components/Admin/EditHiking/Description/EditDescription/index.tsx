@@ -24,7 +24,11 @@ const EditDescriptionContent = ({ hiking }: { hiking: HikingInformation }) => {
           defaultValue={hiking.indication}
           {...register("indication")}
         />
-        <input type="submit" value="Valider les descriptions" />
+        <input
+          disabled={hikingId === "-1"}
+          type="submit"
+          value="Valider les descriptions"
+        />
       </form>
     </EditHikingContent>
   );
