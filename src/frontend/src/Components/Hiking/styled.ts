@@ -224,6 +224,7 @@ export const Map = styled(MapContainer)`
 `;
 
 export const ImageHiking = styled.div`
+  position: relative;
   width: 100%;
   aspect-ratio: 16/9;
   margin: 24px 0;

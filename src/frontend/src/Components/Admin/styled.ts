@@ -130,3 +130,31 @@ export const AddFiles = styled.form`
     margin-bottom: 250px;
   }
 `;
+
+export const ActionImageHiking = styled.div<{ $selected: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid white;
+  padding: 6px 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+
+  > div {
+    cursor: ${(props) => (props.$selected ? "default" : "pointer")};
+    width: 33px;
+    height: 33px;
+    border-radius: 7px;
+    padding: 6px;
+  }
+
+  > div:nth-of-type(1) {
+    background-color: ${(props) => (props.$selected ? "#f28b7d" : "#ee6352")};
+  }
+
+  > div:nth-of-type(2) {
+    background-color: ${(props) => (props.$selected ? "#ffdd99" : "#ffc759")};
+  }
+`;

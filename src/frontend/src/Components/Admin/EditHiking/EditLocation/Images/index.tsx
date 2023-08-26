@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { download_images } from "@/API/downloadImages.ts";
 import { useParams } from "react-router-dom";
 import { get_hiking_information } from "@/API/getHikingInformation.ts";
+import EditImage from "@/Components/Admin/EditHiking/EditLocation/Images/Image";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -87,6 +88,11 @@ export const EditImages = ({
                     <img
                       src={`${API_KEY}/hiking/getImage/${imageId}`}
                       alt={`image-${imageId}`}
+                    />
+                    <EditImage
+                      imageId={imageId}
+                      selected={hiking.main_image === imageId}
+                      setHiking={setHiking}
                     />
                   </ImageHiking>
                 )}

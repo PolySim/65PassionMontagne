@@ -362,3 +362,25 @@ export const downloadImages = async (req: Request, res: Response) => {
     res.json({ error: "download image error" });
   }
 };
+
+export const updateMainImage = async (req: Request, res: Response) => {
+  try {
+    const { hikingId, mainImage } = req.body;
+
+    const updateMainImageQuery = util
+      .promisify(connection.query)
+      .bind(connection);
+
+    await updateMainImageQuery({
+      sql: `UPDATE hiking
+            SET main_image = ?
+            WHERE id = ?`,
+      values: [mainImage, hikingId],
+    });
+
+    res.json({ result: "Edit Main Image success" });
+  } catch (error) {
+    console.log(`error in edit Main Image : ${error}`);
+    res.json({ error: "Edit Main Image" });
+  }
+};

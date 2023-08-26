@@ -13,6 +13,7 @@ import {
   updateContent,
   reorderImages,
   downloadImages,
+  updateMainImage,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -71,5 +72,7 @@ router.post(
   upload.array("images", 12),
   downloadImages,
 );
+
+router.put("/updateMainImage", updateMainImage);
 
 module.exports = router;
