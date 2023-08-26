@@ -18,6 +18,7 @@ const EditLocation = ({
   setHiking: React.Dispatch<React.SetStateAction<HikingInformation>>;
 }) => {
   const { hikingId } = useParams();
+  const [resetGpx, setResetGpx] = useState<number>(0);
   const [positions, setPositions] = useState<[number, number][]>([[0, 0]]);
   const [positionCenter, setPositionCenter] = useState([0, 0]);
   const formRef = useRef<HTMLFormElement>(null);
@@ -27,7 +28,8 @@ const EditLocation = ({
     if (data.gpx.length && hikingId) {
       const formData = new FormData();
       formData.append("gpx", data.gpx[0]);
-      void upload_gpx(formData, parseInt(hikingId));
+      void (await upload_gpx(formData, parseInt(hikingId)));
+      setResetGpx((curr) => curr + 1);
     }
   };
 
@@ -52,7 +54,7 @@ const EditLocation = ({
       }
     };
     void getData();
-  }, []);
+  }, [resetGpx]);
 
   return (
     <LocationHiking>

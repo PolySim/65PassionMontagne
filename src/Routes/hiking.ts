@@ -48,8 +48,6 @@ const uploadImage = multer({ storage: storageImage });
 
 const storageGpx = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(1);
-    const hikingId = req.params.hikingId;
     const uploadPath = path.join(__dirname, "../data/GPX");
     cb(null, uploadPath);
   },

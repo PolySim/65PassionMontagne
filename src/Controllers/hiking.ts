@@ -453,8 +453,10 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
       values: [gpxName, hikingId],
     });
 
-    const fullPath = path.join(__dirname, "../data/GPX", lastName[0].path);
-    fs.unlinkSync(fullPath);
+    if (lastName[0].path !== gpxName) {
+      const fullPath = path.join(__dirname, "../data/GPX", lastName[0].path);
+      fs.unlinkSync(fullPath);
+    }
 
     res.json({ result: "upload new gpx success" });
   } catch (error) {
