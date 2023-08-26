@@ -127,7 +127,7 @@ export const AddFiles = styled.form`
     background-color: ${color.melon};
     font-weight: 400;
     font-family: ${font.rubik};
-    margin-bottom: 250px;
+    margin-bottom: 50px;
   }
 `;
 

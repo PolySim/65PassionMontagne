@@ -26,7 +26,7 @@ const EditImage = ({
   };
 
   const handleDelete = () => {
-    if (hikingId) {
+    if (hikingId && !selected) {
       setHiking((curr) => ({
         ...curr,
         images: curr.images.filter((image) => image !== imageId),

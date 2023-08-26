@@ -27,6 +27,7 @@ export const EditImages = ({
   hiking: HikingInformation;
   setHiking: React.Dispatch<React.SetStateAction<HikingInformation>>;
 }) => {
+  const [isDraging, setIsDraging] = useState<boolean>(false);
   const [state, setState] = useState(0);
   const { register, handleSubmit } = useForm<{ images: FileList }>();
   const formRef = useRef<HTMLFormElement>(null);
@@ -36,6 +37,7 @@ export const EditImages = ({
     setState((curr) => curr + 1);
   }, []);
   const onDragEnd = (result: DropResult) => {
+    setIsDraging(false);
     void reorder_images(
       reorderImages(
         hiking.images,
@@ -73,10 +75,19 @@ export const EditImages = ({
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext
+      onDragEnd={onDragEnd}
+      onDragStart={() => {
+        setIsDraging(true);
+      }}
+    >
       <Droppable droppableId={"droppable"} key={state}>
         {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            style={{ marginBottom: isDraging ? "200px" : "0" }}
+          >
             {hiking.images.map((imageId, i) => (
               <Draggable draggableId={`${imageId}`} index={i} key={imageId}>
                 {(provided) => (
