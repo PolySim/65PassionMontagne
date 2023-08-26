@@ -22,6 +22,10 @@ export const getGPX = (req: Request, res: Response) => {
        WHERE hikingId = ${hikingId}`,
       (error: QueryError, results: GPX) => {
         error_query(error, res);
+        if (!results[0]) {
+          res.json("Get gpx error");
+          return;
+        }
         const gpx = results[0].path;
 
         res.setHeader("Content-Disposition", `attachment; filename=${gpx}`);
@@ -163,12 +167,18 @@ export const getHikingImage = (req: Request, res: Response) => {
        WHERE id = ${imageId}`,
       (error, results: SendHikingImage) => {
         error_query(error, res);
-        res.sendFile(
-          path.join(
-            __dirname,
-            `../data/hiking_image/${results[0].hikingId}/${results[0].path}`,
-          ),
-        );
+        if (results[0]) {
+          res.sendFile(
+            path.join(
+              __dirname,
+              `../data/hiking_image/${results[0].hikingId}/${results[0].path}`,
+            ),
+          );
+        } else {
+          res.sendFile(
+            path.join(__dirname, `../data/hiking_image/default.png`),
+          );
+        }
       },
     );
   } catch (error) {
@@ -443,6 +453,7 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
 
     const getLastName = util.promisify(connection.query).bind(connection);
     const updatePath = util.promisify(connection.query).bind(connection);
+    const insertGpx = util.promisify(connection.query).bind(connection);
 
     const lastName = (await getLastName({
       sql: `SELECT path
@@ -451,16 +462,24 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
       values: [hikingId],
     })) as [{ path: string }];
 
-    await updatePath({
-      sql: `UPDATE gpx
-            SET path = ?
-            WHERE id = ?`,
-      values: [gpxName, hikingId],
-    });
+    if (lastName[0]) {
+      await updatePath({
+        sql: `UPDATE gpx
+              SET path = ?
+              WHERE id = ?`,
+        values: [gpxName, hikingId],
+      });
 
-    if (lastName[0].path !== gpxName) {
-      const fullPath = path.join(__dirname, "../data/GPX", lastName[0].path);
-      fs.unlinkSync(fullPath);
+      if (lastName[0].path !== gpxName) {
+        const fullPath = path.join(__dirname, "../data/GPX", lastName[0].path);
+        fs.unlinkSync(fullPath);
+      }
+    } else {
+      await insertGpx({
+        sql: `INSERT INTO GPX (path, hikingId)
+              VALUES (?, ?)`,
+        values: [gpxName, hikingId],
+      });
     }
 
     res.json({ result: "upload new gpx success" });

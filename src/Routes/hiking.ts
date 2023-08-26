@@ -47,19 +47,6 @@ const storageImage = multer.diskStorage({
 
 const uploadImage = multer({ storage: storageImage });
 
-const storageGpx = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../data/GPX");
-    cb(null, uploadPath);
-  },
-  filename: (req: Request, file, cb) => {
-    req.gpxFileName = file.originalname;
-    cb(null, file.originalname);
-  },
-});
-
-const uploadGpx = multer({ storage: storageGpx });
-
 router.get("/gpx/:hikingId", getGPX);
 
 router.get("/images", getImages);
@@ -93,6 +80,19 @@ router.post(
 router.put("/updateMainImage", updateMainImage);
 
 router.delete("/deleteImage", deleteImage);
+
+const storageGpx = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "../data/GPX");
+    cb(null, uploadPath);
+  },
+  filename: (req: Request, file, cb) => {
+    req.gpxFileName = file.originalname;
+    cb(null, file.originalname);
+  },
+});
+
+const uploadGpx = multer({ storage: storageGpx });
 
 router.post("/uploadGpx/:hikingId", uploadGpx.single("gpx"), uploadNewGpx);
 
