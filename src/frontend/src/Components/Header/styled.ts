@@ -10,8 +10,13 @@ export const HeaderStyle = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100vw;
+  overflow: hidden;
   height: fit-content;
   padding: ${headerPadding}px;
+
+  @media screen and (max-width: 800px) {
+    padding: 24px 12px;
+  }
 `;
 
 export const MainTitle = styled(Link)`
@@ -23,6 +28,12 @@ export const MainTitle = styled(Link)`
   width: 223px;
   height: 100%;
   text-decoration: none;
+
+  @media screen and (max-width: 800px) {
+    font-size: 22px;
+    letter-spacing: 2px;
+    width: fit-content;
+  }
 `;
 
 export const NavBarStyle = styled.div`
@@ -34,6 +45,52 @@ export const NavBarStyle = styled.div`
   height: 100%;
   font-family: ${font.m2};
   font-weight: 600;
+`;
+
+export const NavBarPhoneStyle = styled.div<{ $isOpen: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: max-content;
+
+  > div:nth-of-type(2) {
+    margin-left: 24px;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease-in-out;
+
+    > span {
+      position: absolute;
+      top: 10px;
+      background-color: #000000;
+      height: 2px;
+      width: 50px;
+      transition:
+        transform 0.3s ease-out,
+        opacity 0.1s ease-out;
+
+      @media screen and (max-width: 300px) {
+        width: 30px;
+      }
+    }
+
+    > span:nth-of-type(1) {
+      transform: ${(props) =>
+        props.$isOpen ? "translateY(10px) rotate(135deg)" : "translateY(20px)"};
+    }
+
+    > span:nth-of-type(2) {
+      opacity: ${(props) => (props.$isOpen ? "0" : "1")};
+    }
+
+    > span:nth-of-type(3) {
+      transform: ${(props) =>
+        props.$isOpen
+          ? "translateY(10px) rotate(-135deg)"
+          : "translateY(10px)"};
+    }
+  }
 `;
 
 export const CategoriesStyle = styled.div`
@@ -111,6 +168,13 @@ export const Favorite = styled(Link)`
 export const ConnectionStyle = styled.div`
   border-left: 1px solid #ccc;
   padding-left: 24px;
+
+  @media screen and (max-width: 1000px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+  }
 `;
 
 export const LogInButton = styled.button<{ $signIn: boolean }>`
@@ -126,6 +190,11 @@ export const LogInButton = styled.button<{ $signIn: boolean }>`
   background-color: ${(props) => (props.$signIn ? "white" : color.greenLight)};
   color: ${(props) => (props.$signIn ? color.greenLight : "white")};
   cursor: pointer;
+
+  @media screen and (max-width: 1000px) {
+    margin-left: 0;
+    margin-top: ${(props) => (props.$signIn ? "0" : "12px")};
+  }
 `;
 
 export const ConnectionContainer = styled.div`
@@ -154,6 +223,7 @@ export const ConnectionCardStyle = styled.div`
   position: relative;
   height: max-content;
   width: max-content;
+  margin: 0 12px;
   border-radius: 20px;
   background-color: white;
   box-shadow: 20px 20px 40px -6px rgba(0, 0, 0, 0.2);
