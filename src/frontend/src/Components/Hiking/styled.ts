@@ -125,11 +125,20 @@ export const HikingContent = styled.div`
   display: flex;
   width: 100%;
   padding: 0 24px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 export const HikingDescription = styled.div`
   width: 65%;
   padding: 24px 0;
+
+  @media screen and (max-width: 1000px) {
+    width: 95%;
+  }
 `;
 
 export const StatisticalHiking = styled.div`
@@ -216,6 +225,15 @@ export const LocationHiking = styled.div`
   border-left: 1px solid #ccc;
   margin-left: 24px;
   padding: 24px 0 48px 24px;
+
+  @media screen and (max-width: 1000px) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 95%;
+    border: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
 `;
 
 export const Map = styled(MapContainer)`
@@ -224,6 +242,7 @@ export const Map = styled(MapContainer)`
   outline: none;
   border-radius: 10px;
   z-index: 0;
+  margin-bottom: 24px;
 `;
 
 export const ImageHiking = styled.div`
