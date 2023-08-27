@@ -7,7 +7,7 @@ import MenuPhone from "@/Components/Header/NavBarPhone/MenuPhone";
 
 const NavBarPhone = () => {
   const { user } = useContext(MainContext);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <NavBarPhoneStyle $isOpen={isOpen}>
