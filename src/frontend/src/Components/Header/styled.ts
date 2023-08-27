@@ -54,6 +54,7 @@ export const NavBarPhoneStyle = styled.div<{ $isOpen: boolean }>`
   width: max-content;
 
   > div:nth-of-type(2) {
+    z-index: 1000;
     margin-left: 24px;
     position: relative;
     width: 50px;
@@ -93,7 +94,36 @@ export const NavBarPhoneStyle = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-export const MenuPhoneStyle = styled.div``;
+export const MenuPhoneStyle = styled.div<{ $isOpen: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: white;
+  transform: ${(props) =>
+    props.$isOpen ? "translateX(0)" : "translateX(-100%)"};
+  transition: transform 0.3s ease-in-out;
+`;
+
+export const LinkMenuPhone = styled(Link)<{
+  $isFavorite?: boolean;
+  $isState?: boolean;
+}>`
+  font-size: ${(props) => (props.$isState ? "20px" : "24px")};
+  font-family: ${font.rubik};
+  font-weight: ${(props) => (props.$isState ? "400" : "500")};
+  color: ${(props) => (props.$isFavorite ? color.orange : color.black)};
+  text-decoration: none;
+  margin-top: 24px;
+`;
 
 export const CategoriesStyle = styled.div`
   position: relative;

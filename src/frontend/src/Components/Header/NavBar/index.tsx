@@ -11,7 +11,7 @@ const NavBar = () => {
   return (
     <NavBarStyle>
       <Categories />
-      <Favorite to={"/favorite"}>Mes favoris</Favorite>
+      <Favorite to={"favorite"}>Mes favoris</Favorite>
       {user ? <LogOut /> : <Connection />}
     </NavBarStyle>
   );

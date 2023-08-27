@@ -15,6 +15,7 @@ export const HomeStyle = styled.section`
     scroll-snap-type: x mandatory;
     width: 100%;
     height: 100%;
+    text-align: center;
 
     > img {
       scroll-snap-align: center;

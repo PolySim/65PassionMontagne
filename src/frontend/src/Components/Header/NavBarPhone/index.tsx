@@ -3,10 +3,11 @@ import { useContext, useState } from "react";
 import { MainContext } from "@/context.ts";
 import LogOut from "@/Components/Header/NavBar/LogOut";
 import Connection from "@/Components/Header/NavBar/Connection";
+import MenuPhone from "@/Components/Header/NavBarPhone/MenuPhone";
 
 const NavBarPhone = () => {
   const { user } = useContext(MainContext);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
     <NavBarPhoneStyle $isOpen={isOpen}>
@@ -16,6 +17,7 @@ const NavBarPhone = () => {
         <span />
         <span />
       </div>
+      <MenuPhone isOpen={isOpen} setIsOpen={setIsOpen} />
     </NavBarPhoneStyle>
   );
 };
