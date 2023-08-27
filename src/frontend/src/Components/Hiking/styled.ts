@@ -22,7 +22,7 @@ export const HikingStyle = styled.section`
 `;
 
 export const HeaderHikingStyle = styled.div<{
-  $main_image: number;
+  $main_image: number | null;
 }>`
   display: flex;
   flex-direction: column;
