@@ -15,6 +15,7 @@ import { download_images } from "@/API/downloadImages.ts";
 import { useParams } from "react-router-dom";
 import { get_hiking_information } from "@/API/getHikingInformation.ts";
 import EditImage from "@/Components/Admin/EditHiking/EditLocation/Images/Image";
+import { update_main_image } from "@/API/updateMainImage.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -67,6 +68,16 @@ export const EditImages = ({
           parseInt(hikingId),
         );
         setHiking(newHikingInformation);
+        if (hiking.main_image === null) {
+          void (await update_main_image(
+            parseInt(hikingId),
+            newHikingInformation.images[0],
+          ));
+          setHiking((curr) => ({
+            ...curr,
+            main_image: newHikingInformation.images[0],
+          }));
+        }
       } catch (error) {
         console.log(error);
       }

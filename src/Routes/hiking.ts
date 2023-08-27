@@ -21,6 +21,7 @@ import {
 import path from "path";
 import console from "console";
 import { Request } from "express";
+import fs from "fs";
 
 const express = require("express");
 const router = express.Router();
@@ -36,6 +37,11 @@ const storageImage = multer.diskStorage({
   destination: (req, file, cb) => {
     const hikingId = req.params.hikingId;
     const uploadPath = path.join(__dirname, "../data/hiking_image", hikingId);
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdir(uploadPath, (err) => {
+        console.log(`mkdir error : ${err}`);
+      });
+    }
     cb(null, uploadPath);
   },
   filename: (req: Request, file, cb) => {
