@@ -47,9 +47,10 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
         ...data,
         categoryId: parseInt(categoryId),
       });
-      if ("hikingId" in newHikingId) {
+      if ("hikingId" in newHikingId && newHikingId.hikingId) {
         const newUrl = `/admin/${categoryId}/${newHikingId.hikingId}`;
         window.history.replaceState({}, "", newUrl);
+        window.location.reload();
       }
     }
   };

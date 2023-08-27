@@ -36,7 +36,7 @@ declare module "express" {
 const storageImage = multer.diskStorage({
   destination: (req, file, cb) => {
     const hikingId = req.params.hikingId;
-    const uploadPath = path.join(__dirname, "../data/hiking_image", hikingId);
+    const uploadPath = path.join(__dirname, "data/hiking_image", hikingId);
     if (!fs.existsSync(uploadPath)) {
       fs.mkdir(uploadPath, (err) => {
         console.log(`mkdir error : ${err}`);
@@ -89,7 +89,7 @@ router.delete("/deleteImage", deleteImage);
 
 const storageGpx = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../data/GPX");
+    const uploadPath = path.join(__dirname, "data/GPX");
     cb(null, uploadPath);
   },
   filename: (req: Request, file, cb) => {

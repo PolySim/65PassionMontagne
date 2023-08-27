@@ -233,8 +233,8 @@ export const imageUser = async (req: Request, res: Response) => {
     ? res.sendFile(
         path.join(
           __dirname,
-          `../data/user_image/${pathResult[0].profilePicturePath}`,
+          `data/user_image/${pathResult[0].profilePicturePath}`,
         ),
       )
-    : res.sendFile(path.join(__dirname, `../data/user_image/default.png`));
+    : res.sendFile(path.join(__dirname, `data/user_image/default.png`));
 };

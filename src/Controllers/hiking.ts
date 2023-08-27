@@ -30,7 +30,7 @@ export const getGPX = (req: Request, res: Response) => {
 
         res.setHeader("Content-Disposition", `attachment; filename=${gpx}`);
         res.setHeader("Content-Type", "application/gpx+xml");
-        res.sendFile(path.join(__dirname, `../data/GPX/${gpx}`));
+        res.sendFile(path.join(__dirname, `data/GPX/${gpx}`));
       },
     );
   } catch (error) {
@@ -59,7 +59,7 @@ export const getImages = (req: Request, res: Response) => {
 
 export const getImagesState = (req: Request, res: Response) => {
   const imagePath = req.params.path;
-  res.sendFile(path.join(__dirname, `../data/hiking_image/state/${imagePath}`));
+  res.sendFile(path.join(__dirname, `data/hiking_image/state/${imagePath}`));
 };
 
 type Hikes = {
@@ -171,13 +171,11 @@ export const getHikingImage = (req: Request, res: Response) => {
           res.sendFile(
             path.join(
               __dirname,
-              `../data/hiking_image/${results[0].hikingId}/${results[0].path}`,
+              `data/hiking_image/${results[0].hikingId}/${results[0].path}`,
             ),
           );
         } else {
-          res.sendFile(
-            path.join(__dirname, `../data/hiking_image/default.png`),
-          );
+          res.sendFile(path.join(__dirname, `data/hiking_image/default.png`));
         }
       },
     );
@@ -421,7 +419,7 @@ export const deleteImage = async (req: Request, res: Response) => {
 
     const fullPath = path.join(
       __dirname,
-      "../data/hiking_image",
+      "data/hiking_image",
       hikingId.toString(),
       filePath[0].path,
     );
@@ -472,7 +470,7 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
       });
 
       if (lastName[0].path !== gpxName) {
-        const fullPath = path.join(__dirname, "../data/GPX", lastName[0].path);
+        const fullPath = path.join(__dirname, "data/GPX", lastName[0].path);
         fs.unlinkSync(fullPath);
       }
     } else {

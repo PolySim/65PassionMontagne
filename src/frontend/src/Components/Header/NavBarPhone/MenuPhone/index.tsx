@@ -54,6 +54,7 @@ const MenuPhone = ({
       </LinkMenuPhone>
       {hikesState.map((state) => (
         <LinkMenuPhone
+          key={state.state}
           onClick={() => setIsOpen(false)}
           $isState
           to={`${categories[0].id}/${state.id}`}
@@ -65,6 +66,7 @@ const MenuPhone = ({
         .filter((_category, i) => i > 0)
         .map((category) => (
           <LinkMenuPhone
+            key={category.name}
             onClick={() => setIsOpen(false)}
             to={category.id.toString()}
           >
