@@ -196,7 +196,8 @@ export const getHikes = async (req: Request, res: Response) => {
     const hikes = (await getHikes({
       sql: `SELECT id, main_image, title, state_id
             FROM hiking
-            WHERE categoriesId = ?`,
+            WHERE categoriesId = ?
+            ORDER BY title`,
       values: [categoryId],
     })) as {
       id: number;
