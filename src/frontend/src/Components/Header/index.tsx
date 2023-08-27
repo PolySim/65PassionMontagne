@@ -1,7 +1,7 @@
 import { MainTitle, HeaderStyle } from "@/Components/Header/styled.ts";
 import { useEffect, useState } from "react";
 import NavBar from "@/Components/Header/NavBar";
-import NavBarPhone from "@/Components/Header/MenuPhone";
+import NavBarPhone from "@/Components/Header/NavBarPhone";
 
 export default function Header(): JSX.Element {
   const [width, setWidth] = useState<number>(window.innerWidth);

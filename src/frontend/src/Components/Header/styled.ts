@@ -93,6 +93,8 @@ export const NavBarPhoneStyle = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
+export const MenuPhoneStyle = styled.div``;
+
 export const CategoriesStyle = styled.div`
   position: relative;
   transform: translateY(6px);
