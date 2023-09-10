@@ -252,6 +252,7 @@ export const ImageHiking = styled.div`
   margin: 24px 0;
   border-radius: 10px;
   overflow: hidden;
+  cursor: pointer;
 
   > img {
     width: 100%;
@@ -328,5 +329,67 @@ export const WriteCommentStyle = styled.div`
     background-color: ${color.melon};
     font-weight: 400;
     cursor: pointer;
+  }
+`;
+
+export const FullScreenImageStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  > svg:nth-of-type(1) {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    stroke: white;
+    cursor: pointer;
+  }
+
+  > svg:nth-of-type(2) {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    left: 20px;
+    stroke: white;
+  }
+
+  > svg:nth-of-type(3) {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    stroke: white;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  > div {
+    display: flex;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+
+    > div {
+      scroll-snap-align: center;
+      min-width: 100%;
+      height: 100%;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   }
 `;

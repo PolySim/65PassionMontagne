@@ -1,10 +1,9 @@
-export const Cross = () => {
+export const Cross = ({ onClick }: { onClick?: () => void }) => {
   return (
-    <svg viewBox="0 0 21 21">
+    <svg viewBox="0 0 21 21" onClick={onClick}>
       <g
         fill="none"
         fillRule="evenodd"
-        stroke="#2a2e3b"
         strokeLinecap="round"
         strokeLinejoin="round"
         transform="translate(5 5)"

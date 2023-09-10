@@ -10,12 +10,14 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { get_gpx } from "@/API/getGpx.ts";
 import gpxParser from "gpxparser";
+import FullScreenImage from "@/Components/Hiking/Location/FullScreenImage";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
   : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
 const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
+  const [fullScreenId, setFullScreenId] = useState<number | null>(1);
   const params = useParams();
   const hikingId = parseInt(params.hikingId || "1");
   const [positions, setPositions] = useState<[number, number][]>([[0, 0]]);
@@ -57,14 +59,23 @@ const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
           positions={positions}
         />
       </Map>
-      {hiking.images.map((image) => (
-        <ImageHiking key={image}>
+      {hiking.images.map((image, index) => (
+        <ImageHiking key={image} onClick={() => setFullScreenId(index)}>
           <img
             src={`${API_KEY}/hiking/getImage/${image}`}
             alt={`image-${image}`}
           />
         </ImageHiking>
       ))}
+      {fullScreenId !== null ? (
+        <FullScreenImage
+          setFullScreenId={setFullScreenId}
+          imageFocus={fullScreenId}
+          images={hiking.images}
+        />
+      ) : (
+        <></>
+      )}
     </LocationHiking>
   );
 };
