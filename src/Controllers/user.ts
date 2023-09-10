@@ -56,7 +56,7 @@ export const signUp = async (req: Request, res: Response) => {
 
     await insertUserQuery({
       sql: `INSERT INTO user (email, password, iv, profilePicturePath, role, username)
-            VALUES (?, ?, ?, 'default.jpg', 0, ?)`,
+            VALUES (?, ?, ?, 'default.png', 0, ?)`,
       values: [email, passwordEncrypt, iv, username],
     });
 

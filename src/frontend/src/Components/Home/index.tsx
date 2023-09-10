@@ -27,7 +27,7 @@ export default function Home(): JSX.Element {
         ))}
       </div>
       <Find>
-        <h4>Retrouve ton bonheur </h4>
+        <h4>Trouve ton bonheur </h4>
         <div>
           <SearchSVG />
           <input

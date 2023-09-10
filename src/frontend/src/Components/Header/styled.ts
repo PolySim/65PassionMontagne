@@ -364,8 +364,8 @@ export const SignInFormStyle = styled.form`
 
 export const HikingStateStyle = styled.div<{ $visible: boolean }>`
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-wrap: wrap;
+  justify-content: space-around;
   align-items: center;
   position: absolute;
   height: 90%;
@@ -376,9 +376,9 @@ export const HikingStateStyle = styled.div<{ $visible: boolean }>`
     cursor: pointer;
     position: relative;
     z-index: 100;
-    width: 90%;
+    width: 45%;
     height: 20%;
-    border-radius: 40px;
+    border-radius: 15px;
     overflow: hidden;
     transition: transform 0.2s ease-in-out;
 
