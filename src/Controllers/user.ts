@@ -147,33 +147,45 @@ export const signIn = async (req: Request, res: Response) => {
 };
 
 export const signInToken = async (req: Request, res: Response) => {
-  const { token } = req.body;
+  try {
+    const { token } = req.body;
 
-  const userId = parseInt(jwt.verify(token, process.env.TOKEN));
+    const userId = parseInt(jwt.verify(token, process.env.TOKEN));
 
-  const getUserInformation = util.promisify(connection.query).bind(connection);
-  const getFavorite = util.promisify(connection.query).bind(connection);
+    const getUserInformation = util
+      .promisify(connection.query)
+      .bind(connection);
+    const getFavorite = util.promisify(connection.query).bind(connection);
 
-  const userInformation = (await getUserInformation({
-    sql: `SELECT id, username, profilePicturePath, role
-          FROM user
-          WHERE id = ?`,
-    values: [userId],
-  })) as [
-    { id: number; username: string; profilePicturePath: string; role: number },
-  ];
+    const userInformation = (await getUserInformation({
+      sql: `SELECT id, username, profilePicturePath, role
+            FROM user
+            WHERE id = ?`,
+      values: [userId],
+    })) as [
+      {
+        id: number;
+        username: string;
+        profilePicturePath: string;
+        role: number;
+      },
+    ];
 
-  const favorite = (await getFavorite({
-    sql: `SELECT hikingId
-          FROM favorite
-          WHERE userId = ?`,
-    values: [userId],
-  })) as { hikingId: number }[];
+    const favorite = (await getFavorite({
+      sql: `SELECT hikingId
+            FROM favorite
+            WHERE userId = ?`,
+      values: [userId],
+    })) as { hikingId: number }[];
 
-  res.json({
-    ...userInformation[0],
-    favorite: favorite.map((id) => id.hikingId),
-  });
+    res.json({
+      ...userInformation[0],
+      favorite: favorite.map((id) => id.hikingId),
+    });
+  } catch (error) {
+    console.log(`connection with token error : ${error}`);
+    res.json({ error: "connection with token" });
+  }
 };
 
 export const addFavorite = async (req: Request, res: Response) => {

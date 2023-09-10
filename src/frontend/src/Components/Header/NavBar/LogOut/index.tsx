@@ -1,4 +1,4 @@
-import { LotOut } from "@/Components/Header/styled.ts";
+import { LotOutStyle } from "@/Components/Header/styled.ts";
 import { useContext } from "react";
 import { MainContext } from "@/context.ts";
 
@@ -10,7 +10,7 @@ const LogOut = () => {
     localStorage.removeItem("token");
   };
 
-  return <LotOut onClick={handleLogOut}>Deconnexion</LotOut>;
+  return <LotOutStyle onClick={handleLogOut}>Deconnexion</LotOutStyle>;
 };
 
 export default LogOut;

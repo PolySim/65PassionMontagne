@@ -409,7 +409,7 @@ export const StateName = styled(Link)`
   background-color: rgba(0, 0, 0, 0.3);
 `;
 
-export const LotOut = styled.div`
+export const LotOutStyle = styled.div`
   padding: 6px 12px;
   margin-left: 12px;
   border-radius: 12px;
@@ -418,4 +418,16 @@ export const LotOut = styled.div`
   background-color: ${color.orange};
   color: ${color.lightYellow};
   cursor: pointer;
+`;
+
+export const AdminButtonStyle = styled(Link)`
+  padding: 6px 12px;
+  margin-left: 12px;
+  border-radius: 12px;
+  width: fit-content;
+  height: fit-content;
+  color: ${color.lightYellow};
+  cursor: pointer;
+  background-color: ${color.greenLight};
+  text-decoration: none;
 `;
