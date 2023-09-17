@@ -6,6 +6,8 @@ import { QueryError } from "mysql2";
 import * as util from "util";
 import console from "console";
 import fs from "fs";
+import sharp from "sharp";
+import process from "process";
 
 type GPX = [
   {
@@ -30,7 +32,9 @@ export const getGPX = (req: Request, res: Response) => {
 
         res.setHeader("Content-Disposition", `attachment; filename=${gpx}`);
         res.setHeader("Content-Type", "application/gpx+xml");
-        res.sendFile(path.join(__dirname, `data/GPX/${gpx}`));
+        res.sendFile(
+          path.join(__dirname, process.env.PATHCTR || "", `GPX/${gpx}`),
+        );
       },
     );
   } catch (error) {
@@ -50,7 +54,7 @@ export const getImages = (req: Request, res: Response) => {
      FROM images
      WHERE hikingId = ${hikingId}
     `,
-    (error, results: Images) => {
+    (error: QueryError, results: Images) => {
       error_query(error, res);
       res.json(results);
     },
@@ -59,7 +63,13 @@ export const getImages = (req: Request, res: Response) => {
 
 export const getImagesState = (req: Request, res: Response) => {
   const imagePath = req.params.path;
-  res.sendFile(path.join(__dirname, `data/hiking_image/state/${imagePath}`));
+  res.sendFile(
+    path.join(
+      __dirname,
+      process.env.PATHCTR || "",
+      `/hiking_image/state/${imagePath}`,
+    ),
+  );
 };
 
 type Hikes = {
@@ -72,7 +82,7 @@ export const getHikesStates = (req: Request, res: Response) => {
   connection.query(
     `SELECT *
      FROM hikesState;`,
-    (error, results: Hikes) => {
+    (error: QueryError, results: Hikes) => {
       error_query(error, res);
       res.json(results);
     },
@@ -165,13 +175,14 @@ export const getHikingImage = (req: Request, res: Response) => {
       `SELECT path, hikingId
        FROM images
        WHERE id = ${imageId}`,
-      (error, results: SendHikingImage) => {
+      (error: QueryError, results: SendHikingImage) => {
         error_query(error, res);
         if (results[0]) {
           res.sendFile(
             path.join(
               __dirname,
-              `data/hiking_image/${results[0].hikingId}/${results[0].path}`,
+              process.env.PATHCTR || "",
+              `/hiking_image/${results[0].hikingId}/${results[0].path}`,
             ),
           );
         } else {
@@ -366,14 +377,23 @@ export const downloadImages = async (req: Request, res: Response) => {
 
       const max = maxNumber[0]["Max(order_image)"];
 
-      req.fileName.forEach((image, index) => {
+      const images = req.files as Express.Multer.File[];
+      images.forEach((image, index) => {
+        sharp(image.path)
+          .resize(1500)
+          .toFile(`${image.destination}/c${image.filename}`);
+
+        console.log(image.size);
+        console.log(image);
+
         uploadImageQuery({
           sql: `INSERT INTO images (path, hikingId, order_image)
                 VALUES (?, ?, ?)`,
-          values: [image, req.params.hikingId, max + index],
+          values: [`c${image.filename}`, req.params.hikingId, max + index],
         });
       });
     }
+
     res.json({ result: "success" });
   } catch (error) {
     console.log("download image error");
@@ -419,7 +439,8 @@ export const deleteImage = async (req: Request, res: Response) => {
 
     const fullPath = path.join(
       __dirname,
-      "data/hiking_image",
+      process.env.PATHCTR || "",
+      "hiking_image",
       hikingId.toString(),
       filePath[0].path,
     );
@@ -432,6 +453,15 @@ export const deleteImage = async (req: Request, res: Response) => {
     });
 
     fs.unlinkSync(fullPath);
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        process.env.PATHCTR || "",
+        "hiking_image",
+        hikingId.toString(),
+        filePath[0].path.slice(1),
+      ),
+    );
 
     res.json({ result: "image delete with success" });
   } catch (error) {

@@ -4,17 +4,20 @@ import error_query from "~/db/error_query";
 import mysql from "mysql2";
 import path from "path";
 import console from "console";
+import process from "process";
 
 export const getCategoriesImage = (req: Request, res: Response) => {
   const categoryId = req.params.categoryId;
   connection.query(
     `SELECT path
-                    FROM categories
-                    WHERE id = ${categoryId}`,
+     FROM categories
+     WHERE id = ${categoryId}`,
     (error, results: mysql.RowDataPacket[]) => {
       error_query(error, res);
       const imagePath: string = results[0].path;
-      res.sendFile(path.join(__dirname, `data/Menu/${imagePath}`));
+      res.sendFile(
+        path.join(__dirname, process.env.PATHCTR || "", `/Menu/${imagePath}`),
+      );
     },
   );
 };
@@ -28,7 +31,7 @@ type CategoriesInformation = {
 export const getCategoriesInformation = (req: Request, res: Response) => {
   connection.query(
     `SELECT id, name, name_en
-                    FROM categories;`,
+     FROM categories;`,
     (error, results: CategoriesInformation) => {
       error_query(error, res);
       res.json(results);

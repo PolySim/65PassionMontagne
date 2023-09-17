@@ -128,6 +128,7 @@ export const AddFiles = styled.form<{ $gpx?: boolean }>`
     background-color: ${color.melon};
     font-weight: 400;
     font-family: ${font.rubik};
+    cursor: pointer;
   }
 `;
 

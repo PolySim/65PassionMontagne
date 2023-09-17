@@ -42,15 +42,15 @@ export default function App(): JSX.Element {
           <Route path="*" element={<Home />} />
           <Route
             path="/admin"
-            element={user?.role === 0 ? <Admin /> : <Home />}
+            element={user?.role === 1 ? <Admin /> : <Home />}
           />
           <Route
             path="/admin/:categoryId"
-            element={user?.role === 0 ? <SelectHiking /> : <Home />}
+            element={user?.role === 1 ? <SelectHiking /> : <Home />}
           />
           <Route
             path="/admin/:categoryId/:hikingId"
-            element={user?.role === 0 ? <EditHiking /> : <Home />}
+            element={user?.role === 1 ? <EditHiking /> : <Home />}
           />
           <Route path="/:category/:stateId/:hikingId" element={<Hiking />} />
           <Route path="/:categoryId" element={<Explore />} />

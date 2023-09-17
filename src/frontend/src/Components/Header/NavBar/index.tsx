@@ -14,7 +14,7 @@ const NavBar = () => {
       <Categories />
       <Favorite to={"favorite"}>Mes favoris</Favorite>
       {user ? (
-        user.role === 0 ? (
+        user.role === 1 ? (
           <>
             <AdminButton />
             <LogOut />

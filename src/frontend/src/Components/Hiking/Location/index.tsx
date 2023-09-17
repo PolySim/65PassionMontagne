@@ -17,7 +17,7 @@ const API_KEY = import.meta.env.PROD
   : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
 const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
-  const [fullScreenId, setFullScreenId] = useState<number | null>(1);
+  const [fullScreenId, setFullScreenId] = useState<number | null>(null);
   const params = useParams();
   const hikingId = parseInt(params.hikingId || "1");
   const [positions, setPositions] = useState<[number, number][]>([[0, 0]]);

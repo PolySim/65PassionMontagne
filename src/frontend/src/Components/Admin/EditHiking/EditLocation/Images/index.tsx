@@ -67,6 +67,7 @@ export const EditImages = ({
         const newHikingInformation = await get_hiking_information(
           parseInt(hikingId),
         );
+        console.log(newHikingInformation);
         setHiking(newHikingInformation);
         if (hiking.main_image === null) {
           void (await update_main_image(
