@@ -135,7 +135,7 @@ export const getHikingInformation = (req: Request, res: Response) => {
               JOIN hikesState ON hikesState.id = hiking.state_id
               JOIN difficulty ON difficulty.id = hiking.difficulty
      WHERE hiking.id = ${hikingId}`,
-    (error, results: [HikingInformationWithoutImage]) => {
+    (error: QueryError, results: [HikingInformationWithoutImage]) => {
       error_query(error, res);
       hikingInformationWithoutImage = results[0];
     },
@@ -146,7 +146,7 @@ export const getHikingInformation = (req: Request, res: Response) => {
      WHERE hikingId = ${hikingId}
      ORDER BY order_image
     `,
-    (error, results: HikingImage) => {
+    (error: QueryError, results: HikingImage) => {
       error_query(error, res);
       const images = results.reduce(
         (acc: number[], curr) => [...acc, curr.id],
@@ -186,7 +186,13 @@ export const getHikingImage = (req: Request, res: Response) => {
             ),
           );
         } else {
-          res.sendFile(path.join(__dirname, `data/hiking_image/default.png`));
+          res.sendFile(
+            path.join(
+              __dirname,
+              process.env.PATHCTR || "",
+              `hiking_image/default.png`,
+            ),
+          );
         }
       },
     );
@@ -362,7 +368,7 @@ export const reorderImages = async (req: Request, res: Response) => {
 
 export const downloadImages = async (req: Request, res: Response) => {
   try {
-    if (req.fileName) {
+    if (req.files) {
       const uploadImageQuery = util
         .promisify(connection.query)
         .bind(connection);
@@ -379,22 +385,30 @@ export const downloadImages = async (req: Request, res: Response) => {
 
       const images = req.files as Express.Multer.File[];
       images.forEach((image, index) => {
-        sharp(image.path)
-          .resize(1500)
-          .toFile(`${image.destination}/c${image.filename}`);
-
-        console.log(image.size);
-        console.log(image);
-
         uploadImageQuery({
           sql: `INSERT INTO images (path, hikingId, order_image)
                 VALUES (?, ?, ?)`,
           values: [`c${image.filename}`, req.params.hikingId, max + index],
         });
+
+        const resize = async () =>
+          await sharp(image.path)
+            .metadata()
+            .then((metadata) => {
+              if (metadata.width && metadata.width < 1500) {
+                sharp(image.path).toFile(
+                  `${image.destination}/c${image.filename}`,
+                );
+              } else {
+                sharp(image.path)
+                  .resize(1500)
+                  .toFile(`${image.destination}/c${image.filename}`);
+              }
+            })
+            .then(() => res.json({ result: "success" }));
+        resize();
       });
     }
-
-    res.json({ result: "success" });
   } catch (error) {
     console.log("download image error");
     res.json({ error: "download image error" });
@@ -541,5 +555,34 @@ export const createAlbum = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(`error in create album - ${error}`);
     res.json({ error: "error in create album" });
+  }
+};
+
+export const getFavorite = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const getFavoriteQuery = util.promisify(connection.query).bind(connection);
+
+    const favorites = (await getFavoriteQuery({
+      sql: `SELECT hiking.id, main_image, title, state_id
+            FROM hiking
+                     RIGHT JOIN favorite ON favorite.hikingId = hiking.id
+            WHERE favorite.userId = ?
+            ORDER BY title
+
+      `,
+      values: [userId],
+    })) as {
+      id: number;
+      main_image: number;
+      title: string;
+      state_id: number;
+    }[];
+
+    res.json(favorites);
+  } catch (e) {
+    console.log(`error in getFavorite : ${e}`);
+    res.json({ error: "error in getFavorite" });
   }
 };

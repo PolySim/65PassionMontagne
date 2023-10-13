@@ -17,6 +17,7 @@ import {
   deleteImage,
   uploadNewGpx,
   createAlbum,
+  getFavorite,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -29,16 +30,12 @@ const router = express.Router();
 
 declare module "express" {
   interface Request {
-    fileName?: string[];
     gpxFileName?: string;
   }
 }
 
 const storageImage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const limits = {
-      fileSize: 300,
-    };
     const hikingId = req.params.hikingId;
     const uploadPath = path.join(
       __dirname,
@@ -55,7 +52,6 @@ const storageImage = multer.diskStorage({
   },
   filename: (req: Request, file, cb) => {
     const fileName = Date.now() + path.extname(file.originalname);
-    req.fileName = req.fileName ? [...req.fileName, fileName] : [fileName];
     cb(null, fileName);
   },
 });
@@ -113,5 +109,7 @@ const uploadGpx = multer({ storage: storageGpx });
 router.post("/uploadGpx/:hikingId", uploadGpx.single("gpx"), uploadNewGpx);
 
 router.post("/createAlbum", createAlbum);
+
+router.get("/getFavorites/:userId", getFavorite);
 
 module.exports = router;

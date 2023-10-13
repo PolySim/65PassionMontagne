@@ -9,6 +9,8 @@ const API_KEY = import.meta.env.PROD
   : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
 const HikingExploreCard = ({ hiking }: { hiking: HikingExplore }) => {
+  console.log(hiking);
+
   return (
     <HikingExploreCardStyle>
       <div>
