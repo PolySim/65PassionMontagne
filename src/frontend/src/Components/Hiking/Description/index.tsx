@@ -20,7 +20,8 @@ const API_KEY = import.meta.env.PROD
 
 const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
   const params = useParams();
-  const hikingId = parseInt(params.hikindId || "1");
+  console.log(params);
+  const hikingId = parseInt(params.hikingId || "1");
   const { user, setUser } = useContext(MainContext);
   const [comments, setComments] = useState<CommentsType>([]);
 

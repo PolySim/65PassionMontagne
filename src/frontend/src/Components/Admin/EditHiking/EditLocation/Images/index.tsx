@@ -64,8 +64,14 @@ export const EditImages = ({
       }
       try {
         void (await download_images(formData, parseInt(hikingId)));
-        const newHikingInformation = await get_hiking_information(
-          parseInt(hikingId),
+        const newHikingInformation: HikingInformation = await new Promise(
+          (resolve) => {
+            setTimeout(() => {
+              const data = get_hiking_information(parseInt(hikingId));
+              resolve(data);
+              console.log("finish");
+            }, 300);
+          },
         );
         setHiking(newHikingInformation);
         if (hiking.main_image === null) {
