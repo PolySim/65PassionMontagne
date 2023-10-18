@@ -395,13 +395,13 @@ export const downloadImages = async (req: Request, res: Response) => {
           await sharp(image.path)
             .metadata()
             .then((metadata) => {
-              if (metadata.width && metadata.width < 1500) {
+              if (metadata.width && metadata.width < 1000) {
                 sharp(image.path).toFile(
                   `${image.destination}/c${image.filename}`,
                 );
               } else {
                 sharp(image.path)
-                  .resize(1500)
+                  .resize(1000)
                   .toFile(`${image.destination}/c${image.filename}`);
               }
             })
