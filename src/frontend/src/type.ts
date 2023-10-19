@@ -43,6 +43,7 @@ export type HikesState = {
 
 export type HikingInformation = {
   main_image: number | null;
+  main_image_position: number;
   state: string;
   content: string;
   indication: string;

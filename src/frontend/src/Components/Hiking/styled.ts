@@ -2,10 +2,6 @@ import styled, { keyframes } from "styled-components";
 import { color, font } from "@/const_style.ts";
 import { MapContainer } from "react-leaflet";
 
-const API_KEY = import.meta.env.PROD
-  ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
-  : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
-
 export const HikingStyle = styled.section`
   padding: 48px 0;
   width: 100vw;
@@ -21,9 +17,7 @@ export const HikingStyle = styled.section`
   }
 `;
 
-export const HeaderHikingStyle = styled.div<{
-  $main_image: number | null;
-}>`
+export const HeaderHikingStyle = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
@@ -35,10 +29,6 @@ export const HeaderHikingStyle = styled.div<{
   width: 100%;
   height: 350px;
   background-color: gray;
-  background-image: ${(props) =>
-    props.$main_image === -1 || !props.$main_image
-      ? "none"
-      : `url(${API_KEY}/hiking/getImage/${props.$main_image})`};
   background-size: cover;
   background-position: center;
 
@@ -74,6 +64,20 @@ export const HeaderHikingStyle = styled.div<{
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.2);
+  }
+`;
+
+export const BackgroundImageHeader = styled.div<{ image_position: number }>`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: ${(props) => `0 ${props.image_position}px`};
   }
 `;
 

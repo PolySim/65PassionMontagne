@@ -91,6 +91,7 @@ export const getHikesStates = (req: Request, res: Response) => {
 
 type HikingInformationWithoutImage = {
   main_image: number;
+  main_image_position: number;
   state: string;
   content: string;
   indication: string;
@@ -107,6 +108,7 @@ type HikingImage = {
 
 type HikingInformation = {
   main_image: number;
+  main_image_position: number;
   state: string;
   content: string;
   indication: string;
@@ -126,6 +128,7 @@ export const getHikingInformation = (req: Request, res: Response) => {
             hiking.content,
             hiking.indication,
             hiking.main_image,
+            hiking.main_image_position,
             hiking.title,
             difficulty.difficulty,
             hiking.length,

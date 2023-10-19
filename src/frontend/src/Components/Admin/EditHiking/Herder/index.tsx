@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { HeaderFormType, HikesState, HikingInformation } from "@/type.ts";
-import { HeaderHikingStyle } from "@/Components/Hiking/styled.ts";
+import {
+  BackgroundImageHeader,
+  HeaderHikingStyle,
+} from "@/Components/Hiking/styled.ts";
 import { HeaderForm, SelectHeader } from "@/Components/Admin/styled.ts";
 import { useEffect, useState } from "react";
 import { get_difficulty } from "@/API/getDifficulty.ts";
@@ -8,6 +11,10 @@ import { getHikesState } from "@/API/getHikesStates.ts";
 import { useParams } from "react-router-dom";
 import { update_header } from "@/API/updateHeader.ts";
 import { create_album } from "@/API/createAlbum.ts";
+
+const API_KEY = import.meta.env.PROD
+  ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
+  : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
 const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
   const { hikingId, categoryId } = useParams();
@@ -56,7 +63,13 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
   };
 
   return (
-    <HeaderHikingStyle $main_image={hiking.main_image}>
+    <HeaderHikingStyle>
+      <BackgroundImageHeader image_position={hiking.main_image_position}>
+        <img
+          src={`${API_KEY}/hiking/getImage/${hiking.main_image}`}
+          alt="main image"
+        />
+      </BackgroundImageHeader>
       <HeaderForm onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"

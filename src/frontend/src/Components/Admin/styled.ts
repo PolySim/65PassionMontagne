@@ -17,6 +17,7 @@ export const HeaderForm = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
+  z-index: 100;
 
   > input[type="text"] {
     width: min(100%, 400px);
