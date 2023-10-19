@@ -18,6 +18,7 @@ import {
   uploadNewGpx,
   createAlbum,
   getFavorite,
+  updateMainImagePosition,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -89,6 +90,8 @@ router.post(
 );
 
 router.put("/updateMainImage", updateMainImage);
+
+router.put("/updateMainImagePosition", updateMainImagePosition);
 
 router.delete("/deleteImage", deleteImage);
 

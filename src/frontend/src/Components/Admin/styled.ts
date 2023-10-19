@@ -43,6 +43,25 @@ export const HeaderForm = styled.form`
   }
 `;
 
+export const ArrowPosition = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  svg {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    z-index: 100;
+    width: 30px;
+    height: 30px;
+    stroke: white;
+    cursor: pointer;
+  }
+
+  > svg:nth-of-type(2) {
+    margin: 6px 0 12px 0;
+  }
+`;
+
 export const SelectHeader = styled.select`
   margin-top: 24px;
   width: min(100%, 400px);

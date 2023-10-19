@@ -77,7 +77,8 @@ export const BackgroundImageHeader = styled.div<{ image_position: number }>`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: ${(props) => `0 ${props.image_position}px`};
+    object-position: ${(props) => `50% ${props.image_position}%`};
+    user-select: none;
   }
 `;
 

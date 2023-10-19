@@ -293,6 +293,29 @@ export const updateHeader = async (req: Request, res: Response) => {
   }
 };
 
+export const updateMainImagePosition = async (req: Request, res: Response) => {
+  try {
+    const { hikingId, newPosition } = req.body;
+
+    const updateQuery = util.promisify(connection.query).bind(connection);
+
+    await updateQuery({
+      sql: `
+          UPDATE hiking
+          SET main_image_position = ?
+          WHERE id = ?
+      `,
+      values: [newPosition, hikingId],
+    });
+
+    console.log(`update main image position (id : ${hikingId}) with success`);
+    res.json({ result: "finish with success" });
+  } catch (e) {
+    console.log(`update main image position error : ${e}`);
+    res.json({ error: `update main image position error : ${e}` });
+  }
+};
+
 export const updateStatistical = async (req: Request, res: Response) => {
   try {
     const { distance, time, elevation, hikingId } = req.body;

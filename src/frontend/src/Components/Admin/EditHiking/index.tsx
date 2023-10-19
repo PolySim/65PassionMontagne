@@ -13,6 +13,7 @@ const EditHiking = () => {
     content: "",
     images: [],
     main_image: -1,
+    main_image_position: 50,
     state: "1",
     title: "",
     difficulty: "1",
@@ -36,7 +37,7 @@ const EditHiking = () => {
   return (
     <HikingStyle>
       <div>
-        <EditHeader hiking={hiking} />
+        <EditHeader hiking={hiking} setHiking={setHiking} />
         <HikingContent>
           <EditDescription hiking={hiking} />
           <EditLocation hiking={hiking} setHiking={setHiking} />

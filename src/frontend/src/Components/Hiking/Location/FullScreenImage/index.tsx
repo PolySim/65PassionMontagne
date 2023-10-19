@@ -53,8 +53,8 @@ export const FullScreenImage = ({
   return (
     <FullScreenImageStyle>
       <Cross onClick={() => setFullScreenId(null)} />
-      <ArrowNav reverse={true} onClick={() => handleScroll(true, 1)} />
-      <ArrowNav reverse={false} onClick={() => handleScroll(false, 1)} />
+      <ArrowNav reverse={180} onClick={() => handleScroll(true, 1)} />
+      <ArrowNav reverse={0} onClick={() => handleScroll(false, 1)} />
 
       <div ref={scrollContainer}>
         {images.map((id) => (

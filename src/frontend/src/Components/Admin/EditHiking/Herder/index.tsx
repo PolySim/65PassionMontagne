@@ -4,19 +4,31 @@ import {
   BackgroundImageHeader,
   HeaderHikingStyle,
 } from "@/Components/Hiking/styled.ts";
-import { HeaderForm, SelectHeader } from "@/Components/Admin/styled.ts";
-import { useEffect, useState } from "react";
+import {
+  ArrowPosition,
+  HeaderForm,
+  SelectHeader,
+} from "@/Components/Admin/styled.ts";
+import React, { useEffect, useState } from "react";
 import { get_difficulty } from "@/API/getDifficulty.ts";
 import { getHikesState } from "@/API/getHikesStates.ts";
 import { useParams } from "react-router-dom";
 import { update_header } from "@/API/updateHeader.ts";
 import { create_album } from "@/API/createAlbum.ts";
+import ArrowNav from "@/Components/SVG/arrowNav.tsx";
+import { update_main_image_position } from "@/API/updateMainImagePosition.ts";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
   : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
-const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
+const EditHeader = ({
+  hiking,
+  setHiking,
+}: {
+  hiking: HikingInformation;
+  setHiking: React.Dispatch<React.SetStateAction<HikingInformation>>;
+}) => {
   const { hikingId, categoryId } = useParams();
   const { register, handleSubmit } = useForm<HeaderFormType>();
   const [states, setStates] = useState<HikesState>([
@@ -62,6 +74,30 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
     }
   };
 
+  const handleMainImagePosition: (
+    increment: boolean,
+    hikingId: string | undefined,
+  ) => void = async (increment, hikingId) => {
+    if (hikingId !== undefined) {
+      try {
+        void (await update_main_image_position(
+          hikingId,
+          increment
+            ? hiking.main_image_position + 1
+            : hiking.main_image_position - 1,
+        ));
+        setHiking((curr) => ({
+          ...curr,
+          main_image_position: increment
+            ? curr.main_image_position + 1
+            : curr.main_image_position - 1,
+        }));
+      } catch (e) {
+        throw new Error("error in update main image position");
+      }
+    }
+  };
+
   return (
     <HeaderHikingStyle>
       <BackgroundImageHeader image_position={hiking.main_image_position}>
@@ -71,6 +107,16 @@ const EditHeader = ({ hiking }: { hiking: HikingInformation }) => {
         />
       </BackgroundImageHeader>
       <HeaderForm onSubmit={handleSubmit(onSubmit)}>
+        <ArrowPosition>
+          <ArrowNav
+            reverse={-90}
+            onClick={() => handleMainImagePosition(false, hikingId)}
+          />
+          <ArrowNav
+            reverse={90}
+            onClick={() => handleMainImagePosition(true, hikingId)}
+          />
+        </ArrowPosition>
         <input
           type="text"
           defaultValue={hiking.title}

@@ -15,6 +15,7 @@ const Hiking = () => {
     content: "",
     images: [1],
     main_image: 1,
+    main_image_position: 50,
     state: "",
     title: "",
     difficulty: "",
