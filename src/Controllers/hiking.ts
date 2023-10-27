@@ -358,7 +358,7 @@ export const updateContent = async (req: Request, res: Response) => {
     }
 
     if (description !== "") {
-      await updateIndicationQuery({
+      await updateDescriptionQuery({
         sql: "UPDATE hiking SET content = ? WHERE id = ?",
         values: [description, hikingId],
       });
@@ -421,13 +421,13 @@ export const downloadImages = async (req: Request, res: Response) => {
           await sharp(image.path)
             .metadata()
             .then((metadata) => {
-              if (metadata.width && metadata.width < 1000) {
+              if (metadata.width && metadata.width < 1500) {
                 sharp(image.path).toFile(
                   `${image.destination}/c${image.filename}`,
                 );
               } else {
                 sharp(image.path)
-                  .resize(1000)
+                  .resize(1500)
                   .toFile(`${image.destination}/c${image.filename}`);
               }
             })

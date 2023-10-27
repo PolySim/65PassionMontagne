@@ -150,7 +150,14 @@ export const signInToken = async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
 
-    const userId = parseInt(jwt.verify(token, process.env.TOKEN));
+    let userId: number;
+    try {
+      userId = parseInt(jwt.verify(token, process.env.TOKEN));
+    } catch (e) {
+      console.log(`error in token verify : ${e}`);
+      res.json({ error: "token verify error" });
+      return;
+    }
 
     const getUserInformation = util
       .promisify(connection.query)
