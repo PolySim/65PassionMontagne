@@ -19,6 +19,7 @@ import {
   createAlbum,
   getFavorite,
   updateMainImagePosition,
+  getAllHikes,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -114,5 +115,7 @@ router.post("/uploadGpx/:hikingId", uploadGpx.single("gpx"), uploadNewGpx);
 router.post("/createAlbum", createAlbum);
 
 router.get("/getFavorites/:userId", getFavorite);
+
+router.get("/getAllHikes", getAllHikes);
 
 module.exports = router;

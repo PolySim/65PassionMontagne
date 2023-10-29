@@ -115,3 +115,10 @@ export type CreateAlbumProps = (props: {
   hikingId?: number;
   error?: string;
 }>;
+
+export type HikingSearch = {
+  id: number;
+  title: string;
+  state: string;
+  difficulty: string;
+};
