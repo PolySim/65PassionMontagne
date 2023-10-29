@@ -174,6 +174,17 @@ type SendHikingImage = [
 export const getHikingImage = (req: Request, res: Response) => {
   try {
     const imageId = req.params.imageId;
+
+    if (imageId === "undefined") {
+      return res.sendFile(
+        path.join(
+          __dirname,
+          process.env.PATHCTR || "",
+          `hiking_image/default.png`,
+        ),
+      );
+    }
+
     connection.query(
       `SELECT path, hikingId
        FROM images
