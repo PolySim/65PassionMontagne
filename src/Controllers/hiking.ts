@@ -618,14 +618,13 @@ export const getAllHikes = async (_req: Request, res: Response) => {
     const getAllHikingQuery = util.promisify(connection.query).bind(connection);
 
     const allHiking = await getAllHikingQuery({
-      sql: `SELECT hiking.id, title, state, difficulty.difficulty
+      sql: `SELECT hiking.id, title, state, difficulty.difficulty, state_id, hiking.categoriesId
             FROM hiking
                      LEFT JOIN hikesState ON hiking.state_id = hikesState.id
                      LEFT JOIN difficulty ON hiking.difficulty = difficulty.id
             ORDER BY title`,
     });
 
-    console.log(allHiking);
     res.json(allHiking);
   } catch (e) {
     console.log(`error in getAllHiking : ${e}`);

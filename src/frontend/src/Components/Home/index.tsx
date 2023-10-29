@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SearchSVG from "@/Components/Home/SearchSVG.tsx";
 import { HikingSearch } from "@/type.ts";
 import { findHikes } from "@/Components/Home/findHiking.ts";
+import HikesSearch from "@/Components/Home/hikesSearch";
 
 const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
@@ -64,9 +65,7 @@ export default function Home(): JSX.Element {
             placeholder="Recherche des randos, escalades, refuges ..."
           />
         </div>
-        {hikesSearch.map((hiking) => (
-          <div key={hiking.id}>{hiking.title}</div>
-        ))}
+        <HikesSearch hikes={hikesSearch} />
       </Find>
     </HomeStyle>
   );

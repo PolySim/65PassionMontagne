@@ -47,7 +47,7 @@ export const Find = styled.div`
     margin-bottom: 24px;
   }
 
-  > div {
+  > div:nth-of-type(1) {
     display: flex;
     align-items: center;
     border-radius: 30px;
@@ -56,6 +56,7 @@ export const Find = styled.div`
     border: 1px solid #ccc;
     width: min(652px, 90%);
     background-color: white;
+    z-index: 10;
 
     > svg {
       margin-right: 6px;
