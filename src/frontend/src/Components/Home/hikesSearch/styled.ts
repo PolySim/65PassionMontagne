@@ -9,7 +9,8 @@ export const HikesSearchContainer = styled.div`
   background-color: white;
   padding-top: 31px;
   border-radius: 0 0 30px 30px;
-  overflow: hidden;
+  max-height: 30vh;
+  overflow-y: scroll;
 `;
 
 export const HikingSearchResult = styled.div`
