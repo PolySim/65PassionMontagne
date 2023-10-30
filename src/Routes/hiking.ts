@@ -20,6 +20,7 @@ import {
   getFavorite,
   updateMainImagePosition,
   getAllHikes,
+  rotateImage,
 } from "~/Controllers/hiking";
 import path from "path";
 import console from "console";
@@ -117,5 +118,7 @@ router.post("/createAlbum", createAlbum);
 router.get("/getFavorites/:userId", getFavorite);
 
 router.get("/getAllHikes", getAllHikes);
+
+router.post("/rotate/:imageId", rotateImage);
 
 module.exports = router;

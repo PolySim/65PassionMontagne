@@ -9,6 +9,9 @@ import fs from "fs";
 import sharp from "sharp";
 import process from "process";
 
+const unlinkAsync = util.promisify(fs.unlink);
+const copyFileAsync = util.promisify(fs.copyFile);
+
 type GPX = [
   {
     path: string;
@@ -640,5 +643,52 @@ export const getAllHikes = async (_req: Request, res: Response) => {
   } catch (e) {
     console.log(`error in getAllHiking : ${e}`);
     res.json({ error: "getAllHiking" });
+  }
+};
+
+export const rotateImage = async (req: Request, res: Response) => {
+  try {
+    const { imageId } = req.params;
+    if (!imageId) {
+      return res.status(400).json({ error: "imageId is required" });
+    }
+
+    const getPath = util.promisify(connection.query).bind(connection);
+
+    const imageInformation = (await getPath({
+      sql: `SELECT hikingId, path
+            FROM images
+            WHERE id = ?`,
+      values: [imageId],
+    })) as [{ hikingId: number; path: string }] | [];
+
+    if (imageInformation.length === 0) {
+      return res.status(400).json({ error: "imageId isn't valid" });
+    }
+
+    const imageUrl = path.join(
+      __dirname,
+      process.env.PATHCTR || "",
+      `/hiking_image/${imageInformation[0].hikingId}/${imageInformation[0].path}`,
+    );
+
+    try {
+      const tempImagePath = imageUrl + ".temp";
+      await copyFileAsync(imageUrl, tempImagePath);
+
+      const image = sharp(tempImagePath);
+      await image.rotate(90);
+      await image.toFile(imageUrl);
+      await unlinkAsync(tempImagePath);
+
+      res.json({ message: "Image rotated and replaced successfully." });
+    } catch (e) {
+      res
+        .status(500)
+        .json({ error: "Unable to rotate and replace the image." });
+    }
+  } catch (e) {
+    console.log(`error in rotate image : ${e}`);
+    res.status(500).json({ error: `error in rotate image : ${e}` });
   }
 };
