@@ -6,15 +6,22 @@ import MainImage from "@/Components/SVG/MainImage.tsx";
 import { update_main_image } from "@/API/updateMainImage.ts";
 import { useParams } from "react-router-dom";
 import { delete_image } from "@/API/deleteImage.ts";
+import RotateR from "@/Components/SVG/RotateR.tsx";
+
+const API_KEY = import.meta.env.PROD
+  ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
+  : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
 const EditImage = ({
   imageId,
   selected,
   setHiking,
+  setImageKey,
 }: {
   imageId: number;
   selected: boolean;
   setHiking: React.Dispatch<React.SetStateAction<HikingInformation>>;
+  setImageKey: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const { hikingId } = useParams();
 
@@ -35,6 +42,17 @@ const EditImage = ({
     }
   };
 
+  const handleRotate = async () => {
+    if (imageId) {
+      try {
+        await fetch(`${API_KEY}/hiking/rotate/${imageId}`, { method: "POST" });
+        setImageKey((curr) => curr + 1);
+      } catch (e) {
+        throw new Error(`error in rotate image - ${e}`);
+      }
+    }
+  };
+
   return (
     <ActionImageHiking $selected={selected}>
       <div onClick={handleDelete}>
@@ -42,6 +60,9 @@ const EditImage = ({
       </div>
       <div onClick={handleMainImage}>
         <MainImage />
+      </div>
+      <div onClick={handleRotate}>
+        <RotateR />
       </div>
     </ActionImageHiking>
   );

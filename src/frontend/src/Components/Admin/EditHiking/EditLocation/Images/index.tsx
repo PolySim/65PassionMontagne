@@ -30,6 +30,7 @@ export const EditImages = ({
 }) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [state, setState] = useState(0);
+  const [imageKey, setImageKey] = useState<number>(0);
   const { register, handleSubmit } = useForm<{ images: FileList }>();
   const formRef = useRef<HTMLFormElement>(null);
   const { hikingId } = useParams();
@@ -113,13 +114,14 @@ export const EditImages = ({
                     {...provided.dragHandleProps}
                   >
                     <img
-                      src={`${API_KEY}/hiking/getImage/${imageId}`}
+                      src={`${API_KEY}/hiking/getImage/${imageId}?time${imageKey}`}
                       alt={`image-${imageId}`}
                     />
                     <EditImage
                       imageId={imageId}
                       selected={hiking.main_image === imageId}
                       setHiking={setHiking}
+                      setImageKey={setImageKey}
                     />
                   </ImageHiking>
                 )}

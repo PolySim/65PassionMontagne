@@ -178,4 +178,9 @@ export const ActionImageHiking = styled.div<{ $selected: boolean }>`
   > div:nth-of-type(2) {
     background-color: ${(props) => (props.$selected ? "#ffdd99" : "#ffc759")};
   }
+
+  > div:nth-of-type(3) {
+    cursor: pointer;
+    background-color: #9ecf8c;
+  }
 `;
