@@ -127,7 +127,7 @@ export const LinkMenuPhone = styled(Link)<{
 export const CategoriesStyle = styled.div`
   position: relative;
   transform: translateY(6px);
-  z-index: 1000000;
+  z-index: 100;
 
   &:hover > div:nth-of-type(2) {
     display: flex;
