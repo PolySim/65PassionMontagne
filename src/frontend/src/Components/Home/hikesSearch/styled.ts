@@ -11,6 +11,10 @@ export const HikesSearchContainer = styled.div`
   border-radius: 0 0 30px 30px;
   max-height: 30vh;
   overflow-y: scroll;
+
+  @media screen and (max-width: 768px) {
+    top: calc(50% + 70px);
+  }
 `;
 
 export const HikingSearchResult = styled.div`
