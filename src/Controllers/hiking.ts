@@ -1,4 +1,5 @@
-import connection from "~/db/database_connection";
+// import connection from "~/db/database_connection";
+import { createNewConnection } from "~/db/database_connection";
 import { Request, Response } from "express";
 import error_query from "~/db/error_query";
 import path from "path";
@@ -20,6 +21,7 @@ type GPX = [
 
 export const getGPX = (req: Request, res: Response) => {
   try {
+    const connection = createNewConnection();
     const hikingId = req.params.hikingId;
     connection.query(
       `SELECT path
@@ -29,6 +31,7 @@ export const getGPX = (req: Request, res: Response) => {
         error_query(error, res);
         if (!results[0]) {
           res.json("Get gpx error");
+          connection.end();
           return;
         }
         const gpx = results[0].path;
@@ -40,6 +43,7 @@ export const getGPX = (req: Request, res: Response) => {
         );
       },
     );
+    connection.end();
   } catch (error) {
     console.log("Get gpx - error");
     res.json("Get gpx error");
@@ -51,28 +55,40 @@ type Images = {
 }[];
 
 export const getImages = (req: Request, res: Response) => {
-  const { hikingId } = req.body;
-  connection.query(
-    `SELECT id
-     FROM images
-     WHERE hikingId = ${hikingId}
-    `,
-    (error: QueryError, results: Images) => {
-      error_query(error, res);
-      res.json(results);
-    },
-  );
+  try {
+    const { hikingId } = req.body;
+    const connection = createNewConnection();
+    connection.query(
+      `SELECT id
+       FROM images
+       WHERE hikingId = ${hikingId}
+      `,
+      (error: QueryError, results: Images) => {
+        error_query(error, res);
+        res.json(results);
+      },
+    );
+    connection.end();
+  } catch (e) {
+    console.log(`error in getImages : ${e}`);
+    res.status(500).json({ error: "getImages error" });
+  }
 };
 
 export const getImagesState = (req: Request, res: Response) => {
-  const imagePath = req.params.path;
-  res.sendFile(
-    path.join(
-      __dirname,
-      process.env.PATHCTR || "",
-      `/hiking_image/state/${imagePath}`,
-    ),
-  );
+  try {
+    const imagePath = req.params.path;
+    res.sendFile(
+      path.join(
+        __dirname,
+        process.env.PATHCTR || "",
+        `/hiking_image/state/${imagePath}`,
+      ),
+    );
+  } catch (e) {
+    console.log(`GetImagesState error : ${e}`);
+    res.status(500).json({ error: "getImagesState error" });
+  }
 };
 
 type Hikes = {
@@ -82,14 +98,21 @@ type Hikes = {
 }[];
 
 export const getHikesStates = (req: Request, res: Response) => {
-  connection.query(
-    `SELECT *
-     FROM hikesState;`,
-    (error: QueryError, results: Hikes) => {
-      error_query(error, res);
-      res.json(results);
-    },
-  );
+  try {
+    const connection = createNewConnection();
+    connection.query(
+      `SELECT *
+       FROM hikesState;`,
+      (error: QueryError, results: Hikes) => {
+        error_query(error, res);
+        res.json(results);
+      },
+    );
+    connection.end();
+  } catch (e) {
+    console.log(`error in getHikesStates : ${e}`);
+    res.status(500).json({ error: "getHikesStates error" });
+  }
 };
 
 type HikingInformationWithoutImage = {
@@ -124,47 +147,54 @@ type HikingInformation = {
 };
 
 export const getHikingInformation = (req: Request, res: Response) => {
-  const hikingId = req.params.hikingId;
-  let hikingInformationWithoutImage: HikingInformationWithoutImage;
-  connection.query(
-    `SELECT hikesState.state,
-            hiking.content,
-            hiking.indication,
-            hiking.main_image,
-            hiking.main_image_position,
-            hiking.title,
-            difficulty.difficulty,
-            hiking.length,
-            hiking.elevation,
-            hiking.duration
-     FROM hiking
-              JOIN hikesState ON hikesState.id = hiking.state_id
-              JOIN difficulty ON difficulty.id = hiking.difficulty
-     WHERE hiking.id = ${hikingId}`,
-    (error: QueryError, results: [HikingInformationWithoutImage]) => {
-      error_query(error, res);
-      hikingInformationWithoutImage = results[0];
-    },
-  );
-  connection.query(
-    `SELECT id
-     FROM images
-     WHERE hikingId = ${hikingId}
-     ORDER BY order_image
-    `,
-    (error: QueryError, results: HikingImage) => {
-      error_query(error, res);
-      const images = results.reduce(
-        (acc: number[], curr) => [...acc, curr.id],
-        [],
-      );
-      const hikingInformation: HikingInformation = {
-        ...hikingInformationWithoutImage,
-        images: images,
-      };
-      res.json(hikingInformation);
-    },
-  );
+  try {
+    const hikingId = req.params.hikingId;
+    let hikingInformationWithoutImage: HikingInformationWithoutImage;
+    const connection = createNewConnection();
+    connection.query(
+      `SELECT hikesState.state,
+              hiking.content,
+              hiking.indication,
+              hiking.main_image,
+              hiking.main_image_position,
+              hiking.title,
+              difficulty.difficulty,
+              hiking.length,
+              hiking.elevation,
+              hiking.duration
+       FROM hiking
+                JOIN hikesState ON hikesState.id = hiking.state_id
+                JOIN difficulty ON difficulty.id = hiking.difficulty
+       WHERE hiking.id = ${hikingId}`,
+      (error: QueryError, results: [HikingInformationWithoutImage]) => {
+        error_query(error, res);
+        hikingInformationWithoutImage = results[0];
+      },
+    );
+    connection.query(
+      `SELECT id
+       FROM images
+       WHERE hikingId = ${hikingId}
+       ORDER BY order_image
+      `,
+      (error: QueryError, results: HikingImage) => {
+        error_query(error, res);
+        const images = results.reduce(
+          (acc: number[], curr) => [...acc, curr.id],
+          [],
+        );
+        const hikingInformation: HikingInformation = {
+          ...hikingInformationWithoutImage,
+          images: images,
+        };
+        res.json(hikingInformation);
+      },
+    );
+    connection.end();
+  } catch (e) {
+    console.log(`error in getHikingInformation : ${e}`);
+    res.status(500).json({ error: "getHikingInformation error" });
+  }
 };
 
 type SendHikingImage = [
@@ -188,6 +218,7 @@ export const getHikingImage = (req: Request, res: Response) => {
       );
     }
 
+    const connection = createNewConnection();
     connection.query(
       `SELECT path, hikingId
        FROM images
@@ -213,6 +244,7 @@ export const getHikingImage = (req: Request, res: Response) => {
         }
       },
     );
+    connection.end();
   } catch (error) {
     console.log(`error in send image : ${error}`);
     res.json({ error: "error in send image" });
@@ -223,6 +255,7 @@ export const getHikes = async (req: Request, res: Response) => {
   try {
     const categoryId = req.params.categoryId;
 
+    const connection = createNewConnection();
     const getHikes = util.promisify(connection.query).bind(connection);
 
     const hikes = (await getHikes({
@@ -239,6 +272,7 @@ export const getHikes = async (req: Request, res: Response) => {
     }[];
 
     res.json(hikes);
+    connection.end();
   } catch (error) {
     console.log(`error in getHikes : ${error}`);
     res.json({ error: "getHikes error" });
@@ -250,6 +284,7 @@ export const getHikesWithState = async (req: Request, res: Response) => {
     const categoryId = req.params.categoryId;
     const stateId = req.params.stateId;
 
+    const connection = createNewConnection();
     const getHikes = util.promisify(connection.query).bind(connection);
 
     const hikes = (await getHikes({
@@ -261,6 +296,7 @@ export const getHikesWithState = async (req: Request, res: Response) => {
     })) as { id: number; main_image: number; title: string }[];
 
     res.json(hikes);
+    connection.end();
   } catch (error) {
     console.log(`error in getHikes : ${error}`);
     res.json({ error: "getHikes error" });
@@ -271,6 +307,7 @@ export const updateHeader = async (req: Request, res: Response) => {
   try {
     const { title, state, difficulty, hikingId } = req.body;
 
+    const connection = createNewConnection();
     const updateTitle = util.promisify(connection.query).bind(connection);
     const updateState = util.promisify(connection.query).bind(connection);
     const updateDifficulty = util.promisify(connection.query).bind(connection);
@@ -301,6 +338,7 @@ export const updateHeader = async (req: Request, res: Response) => {
     }
 
     res.json({ result: "updateHeader success" });
+    connection.end();
   } catch (error) {
     console.log(`Update header error - ${error}`);
     res.json({ error: "updateHeader error" });
@@ -311,6 +349,7 @@ export const updateMainImagePosition = async (req: Request, res: Response) => {
   try {
     const { hikingId, newPosition } = req.body;
 
+    const connection = createNewConnection();
     const updateQuery = util.promisify(connection.query).bind(connection);
 
     await updateQuery({
@@ -324,6 +363,7 @@ export const updateMainImagePosition = async (req: Request, res: Response) => {
 
     console.log(`update main image position (id : ${hikingId}) with success`);
     res.json({ result: "finish with success" });
+    connection.end();
   } catch (e) {
     console.log(`update main image position error : ${e}`);
     res.json({ error: `update main image position error : ${e}` });
@@ -334,6 +374,7 @@ export const updateStatistical = async (req: Request, res: Response) => {
   try {
     const { distance, time, elevation, hikingId } = req.body;
 
+    const connection = createNewConnection();
     const updateStatisticalQuery = util
       .promisify(connection.query)
       .bind(connection);
@@ -347,6 +388,7 @@ export const updateStatistical = async (req: Request, res: Response) => {
       values: [distance, time, elevation, hikingId],
     });
     res.json({ result: "update statistical success" });
+    connection.end();
   } catch (error) {
     console.log(`update statistical error - ${error}`);
     res.json({ error: "update statistical error" });
@@ -357,6 +399,7 @@ export const updateContent = async (req: Request, res: Response) => {
   try {
     const { indication, description, hikingId } = req.body;
 
+    const connection = createNewConnection();
     const updateDescriptionQuery = util
       .promisify(connection.query)
       .bind(connection);
@@ -379,6 +422,7 @@ export const updateContent = async (req: Request, res: Response) => {
     }
 
     res.json({ result: "update content success" });
+    connection.end();
   } catch (error) {
     console.log(`update content error - ${error}`);
     res.json({ error: "update content error" });
@@ -389,6 +433,7 @@ export const reorderImages = async (req: Request, res: Response) => {
   try {
     const { images }: { images: number[] } = req.body;
 
+    const connection = createNewConnection();
     const reorderQuery = util.promisify(connection.query).bind(connection);
 
     for (let i = 0; i < images.length; i++) {
@@ -400,6 +445,7 @@ export const reorderImages = async (req: Request, res: Response) => {
       });
     }
     res.json({ result: "reorder image success" });
+    connection.end();
   } catch (error) {
     console.log(`reorder error : ${error}`);
     res.json({ error: "reorder error" });
@@ -409,6 +455,7 @@ export const reorderImages = async (req: Request, res: Response) => {
 export const downloadImages = async (req: Request, res: Response) => {
   try {
     if (req.files) {
+      const connection = createNewConnection();
       const uploadImageQuery = util
         .promisify(connection.query)
         .bind(connection);
@@ -448,6 +495,7 @@ export const downloadImages = async (req: Request, res: Response) => {
             .then(() => res.json({ result: "success" }));
         resize();
       });
+      connection.end();
     }
   } catch (error) {
     console.log("download image error");
@@ -459,6 +507,7 @@ export const updateMainImage = async (req: Request, res: Response) => {
   try {
     const { hikingId, mainImage } = req.body;
 
+    const connection = createNewConnection();
     const updateMainImageQuery = util
       .promisify(connection.query)
       .bind(connection);
@@ -471,6 +520,7 @@ export const updateMainImage = async (req: Request, res: Response) => {
     });
 
     res.json({ result: "Edit Main Image success" });
+    connection.end();
   } catch (error) {
     console.log(`error in edit Main Image : ${error}`);
     res.json({ error: "Edit Main Image" });
@@ -481,6 +531,7 @@ export const deleteImage = async (req: Request, res: Response) => {
   try {
     const { imageId, hikingId } = req.body;
 
+    const connection = createNewConnection();
     const getImagePath = util.promisify(connection.query).bind(connection);
     const deleteInDB = util.promisify(connection.query).bind(connection);
 
@@ -518,6 +569,7 @@ export const deleteImage = async (req: Request, res: Response) => {
     );
 
     res.json({ result: "image delete with success" });
+    connection.end();
   } catch (error) {
     console.log(`delete image error : ${error}`);
     res.json({ error: "delete image error" });
@@ -534,6 +586,7 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
       return;
     }
 
+    const connection = createNewConnection();
     const getLastName = util.promisify(connection.query).bind(connection);
     const updatePath = util.promisify(connection.query).bind(connection);
     const insertGpx = util.promisify(connection.query).bind(connection);
@@ -566,6 +619,7 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
     }
 
     res.json({ result: "upload new gpx success" });
+    connection.end();
   } catch (error) {
     console.log(`upload new gpx error: ${error}`);
     res.json({ error: "upload new gpx error" });
@@ -576,6 +630,7 @@ export const createAlbum = async (req: Request, res: Response) => {
   try {
     const { title, difficulty, state, categoryId } = req.body;
 
+    const connection = createNewConnection();
     const getMaxId = util.promisify(connection.query).bind(connection);
     const createAlbumQuery = util.promisify(connection.query).bind(connection);
 
@@ -592,6 +647,7 @@ export const createAlbum = async (req: Request, res: Response) => {
     })) as [{ "MAX(id)": number }];
 
     res.json({ hikingId: maxId[0]["MAX(id)"] });
+    connection.end();
   } catch (error) {
     console.log(`error in create album - ${error}`);
     res.json({ error: "error in create album" });
@@ -602,6 +658,7 @@ export const getFavorite = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
+    const connection = createNewConnection();
     const getFavoriteQuery = util.promisify(connection.query).bind(connection);
 
     const favorites = (await getFavoriteQuery({
@@ -621,6 +678,7 @@ export const getFavorite = async (req: Request, res: Response) => {
     }[];
 
     res.json(favorites);
+    connection.end();
   } catch (e) {
     console.log(`error in getFavorite : ${e}`);
     res.json({ error: "error in getFavorite" });
@@ -629,7 +687,17 @@ export const getFavorite = async (req: Request, res: Response) => {
 
 export const getAllHikes = async (_req: Request, res: Response) => {
   try {
+    const connection = createNewConnection();
     const getAllHikingQuery = util.promisify(connection.query).bind(connection);
+
+    const temp = util.promisify(connection.query).bind(connection);
+
+    await temp({
+      sql: `SELECT *
+            FROM hiking
+            WHERE id = ?`,
+      values: [undefined],
+    });
 
     const allHiking = await getAllHikingQuery({
       sql: `SELECT hiking.id, title, state, difficulty.difficulty, state_id, hiking.categoriesId
@@ -640,6 +708,7 @@ export const getAllHikes = async (_req: Request, res: Response) => {
     });
 
     res.json(allHiking);
+    connection.end();
   } catch (e) {
     console.log(`error in getAllHiking : ${e}`);
     res.json({ error: "getAllHiking" });
@@ -653,6 +722,7 @@ export const rotateImage = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "imageId is required" });
     }
 
+    const connection = createNewConnection();
     const getPath = util.promisify(connection.query).bind(connection);
 
     const imageInformation = (await getPath({
@@ -663,6 +733,7 @@ export const rotateImage = async (req: Request, res: Response) => {
     })) as [{ hikingId: number; path: string }] | [];
 
     if (imageInformation.length === 0) {
+      connection.end();
       return res.status(400).json({ error: "imageId isn't valid" });
     }
 
@@ -687,6 +758,7 @@ export const rotateImage = async (req: Request, res: Response) => {
         .status(500)
         .json({ error: "Unable to rotate and replace the image." });
     }
+    connection.end();
   } catch (e) {
     console.log(`error in rotate image : ${e}`);
     res.status(500).json({ error: `error in rotate image : ${e}` });

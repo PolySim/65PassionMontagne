@@ -1,23 +1,30 @@
 import { Request, Response } from "express";
-import connection from "~/db/database_connection";
 import console from "console";
 import { encrypt } from "~/Encrypt/encrypt";
 import { decrypt } from "~/Encrypt/decrypt";
 import * as util from "util";
 import path from "path";
 import process from "process";
+import { createNewConnection } from "~/db/database_connection";
 
 const jwt = require("jsonwebtoken");
 
 export const getUserName = (req: Request, res: Response) => {
-  connection.query("SELECT username FROM user", (error, results, fields) => {
-    if (error) {
-      console.error("Error executing query:", error);
-      res.status(500).send("Error executing query");
-      return;
-    }
-    res.status(201).json(results);
-  });
+  try {
+    const connection = createNewConnection();
+    connection.query("SELECT username FROM user", (error, results, fields) => {
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).send("Error executing query");
+        return;
+      }
+      res.status(201).json(results);
+    });
+    connection.end();
+  } catch (e) {
+    console.log(`error in getUserName : ${e}`);
+    res.status(500).json({ error: "getUserName error" });
+  }
 };
 
 export const signUp = async (req: Request, res: Response) => {
@@ -25,6 +32,7 @@ export const signUp = async (req: Request, res: Response) => {
     const { username, password, email } = req.body;
     const { iv, passwordEncrypt } = encrypt(password);
 
+    const connection = createNewConnection();
     const checkUsernameQuery = util
       .promisify(connection.query)
       .bind(connection);
@@ -47,10 +55,12 @@ export const signUp = async (req: Request, res: Response) => {
     })) as [{ id: number }];
 
     if (usernameResult[0]) {
+      connection.end();
       return res.json({ error: "username" });
     }
 
     if (emailResult[0]) {
+      connection.end();
       return res.json({ error: "email" });
     }
 
@@ -69,6 +79,7 @@ export const signUp = async (req: Request, res: Response) => {
 
     const accessToken = jwt.sign(userId[0].id, process.env.TOKEN);
 
+    connection.end();
     return res.json({
       id: userId[0].id,
       username: username,
@@ -78,6 +89,7 @@ export const signUp = async (req: Request, res: Response) => {
       token: accessToken,
     });
   } catch (error) {
+    console.log(`error in signUp : ${error}`);
     res.status(500).json({ error: "sign up error" });
   }
 };
@@ -85,6 +97,7 @@ export const signUp = async (req: Request, res: Response) => {
 export const signIn = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
+    const connection = createNewConnection();
     const getPasswordEncrypt = util
       .promisify(connection.query)
       .bind(connection);
@@ -108,6 +121,7 @@ export const signIn = async (req: Request, res: Response) => {
     ];
 
     if (!passwordResult[0]) {
+      connection.end();
       return res.json({ error: "username" });
     }
 
@@ -117,6 +131,7 @@ export const signIn = async (req: Request, res: Response) => {
     );
 
     if (passwordDecrypt !== password) {
+      connection.end();
       return res.json({ error: "password" });
     }
 
@@ -140,8 +155,10 @@ export const signIn = async (req: Request, res: Response) => {
 
     const accessToken = jwt.sign(result.id, process.env.TOKEN);
 
+    connection.end();
     return res.json({ ...result, favorite: favorite, token: accessToken });
   } catch (error) {
+    console.log(`error in sign in : ${error}`);
     res.status(500).json({ error: "sign in error" });
   }
 };
@@ -159,6 +176,7 @@ export const signInToken = async (req: Request, res: Response) => {
       return;
     }
 
+    const connection = createNewConnection();
     const getUserInformation = util
       .promisify(connection.query)
       .bind(connection);
@@ -189,6 +207,7 @@ export const signInToken = async (req: Request, res: Response) => {
       ...userInformation[0],
       favorite: favorite.map((id) => id.hikingId),
     });
+    connection.end();
   } catch (error) {
     console.log(`connection with token error : ${error}`);
     res.json({ error: "connection with token" });
@@ -199,6 +218,7 @@ export const addFavorite = async (req: Request, res: Response) => {
   try {
     const { userId, hikingId } = req.body;
 
+    const connection = createNewConnection();
     const addFavoriteQuery = util.promisify(connection.query).bind(connection);
 
     await addFavoriteQuery({
@@ -209,6 +229,7 @@ export const addFavorite = async (req: Request, res: Response) => {
 
     console.log("Favorite add with success");
     res.json({ result: "Favorite add with success" });
+    connection.end();
   } catch (error) {
     res.status(500).json({ error: "add favorite error" });
   }
@@ -218,6 +239,7 @@ export const removeFavorite = async (req: Request, res: Response) => {
   try {
     const { userId, hikingId } = req.body;
 
+    const connection = createNewConnection();
     const removeFavoriteQuery = util
       .promisify(connection.query)
       .bind(connection);
@@ -231,29 +253,38 @@ export const removeFavorite = async (req: Request, res: Response) => {
     });
 
     res.json({ result: "Remove favorite success" });
+    connection.end();
   } catch (error) {
+    console.log(`error in removeFavorite : ${error}`);
     res.status(500).json({ error: "remove favorite error" });
   }
 };
 
 export const imageUser = async (req: Request, res: Response) => {
-  const userId = req.params.userId;
+  try {
+    const userId = req.params.userId;
 
-  const imageQuery = util.promisify(connection.query).bind(connection);
+    const connection = createNewConnection();
+    const imageQuery = util.promisify(connection.query).bind(connection);
 
-  const pathResult = (await imageQuery({
-    sql: `SELECT profilePicturePath
-          FROM user
-          WHERE id = ?`,
-    values: [userId],
-  })) as [{ profilePicturePath: string }];
+    const pathResult = (await imageQuery({
+      sql: `SELECT profilePicturePath
+            FROM user
+            WHERE id = ?`,
+      values: [userId],
+    })) as [{ profilePicturePath: string }];
 
-  pathResult[0]
-    ? res.sendFile(
-        path.join(
-          __dirname,
-          `data/user_image/${pathResult[0].profilePicturePath}`,
-        ),
-      )
-    : res.sendFile(path.join(__dirname, `data/user_image/default.png`));
+    pathResult[0]
+      ? res.sendFile(
+          path.join(
+            __dirname,
+            `data/user_image/${pathResult[0].profilePicturePath}`,
+          ),
+        )
+      : res.sendFile(path.join(__dirname, `data/user_image/default.png`));
+    connection.end();
+  } catch (e) {
+    console.log(`error in imageUser : ${e}`);
+    res.status(500).json({ error: "imageUser error" });
+  }
 };
