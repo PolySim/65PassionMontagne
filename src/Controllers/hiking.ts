@@ -475,25 +475,26 @@ export const downloadImages = async (req: Request, res: Response) => {
         uploadImageQuery({
           sql: `INSERT INTO images (path, hikingId, order_image)
                 VALUES (?, ?, ?)`,
-          values: [`c${image.filename}`, req.params.hikingId, max + index],
+          values: [`${image.filename}`, req.params.hikingId, max + index],
         });
 
-        const resize = async () =>
-          await sharp(image.path)
-            .metadata()
-            .then((metadata) => {
-              if (metadata.width && metadata.width < 1500) {
-                sharp(image.path).toFile(
-                  `${image.destination}/c${image.filename}`,
-                );
-              } else {
-                sharp(image.path)
-                  .resize(1500)
-                  .toFile(`${image.destination}/c${image.filename}`);
-              }
-            })
-            .then(() => res.json({ result: "success" }));
-        resize();
+        const resize = async () => {
+          const tempImagePath = image.path + ".temp";
+          await copyFileAsync(image.path, tempImagePath);
+
+          const imageTemp = sharp(tempImagePath);
+          await imageTemp.resize(1500);
+          await imageTemp.toFile(image.path);
+          await unlinkAsync(tempImagePath);
+        };
+
+        try {
+          resize();
+          res.json({ result: "success" });
+        } catch (e) {
+          console.log(`error in resize image : ${e}`);
+          res.status(500).json({ error: `resize image error : ${e}` });
+        }
       });
       connection.end();
     }

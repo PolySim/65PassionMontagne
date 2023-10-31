@@ -48,7 +48,9 @@ const storageImage = multer.diskStorage({
     );
     if (!fs.existsSync(uploadPath)) {
       fs.mkdir(uploadPath, (err) => {
-        console.log(`mkdir error : ${err}`);
+        if (err) {
+          console.log(`mkdir error : ${err}`);
+        }
       });
     }
     cb(null, uploadPath);
