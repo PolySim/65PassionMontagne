@@ -66,10 +66,40 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
         </div>
       </StatisticalHiking>
       <HikingResume>
-        <h5>Description</h5>
-        <p>{hiking.content}</p>
-        <h5>Indication</h5>
-        <p>{hiking.indication}</p>
+        {hiking.content ? (
+          <>
+            <h5>Description</h5>
+            <p>
+              {hiking.content.split("\n").map((line, index) =>
+                index + 1 === hiking.content.split("\n").length ? (
+                  <>{line}</>
+                ) : (
+                  <>
+                    {line}
+                    <br />
+                  </>
+                ),
+              )}
+            </p>
+          </>
+        ) : null}
+        {hiking.indication ? (
+          <>
+            <h5>Indication</h5>
+            <p>
+              {hiking.indication.split("\n").map((line, index) =>
+                index + 1 === hiking.indication.split("\n").length ? (
+                  <>{line}</>
+                ) : (
+                  <>
+                    {line}
+                    <br />
+                  </>
+                ),
+              )}
+            </p>
+          </>
+        ) : null}
       </HikingResume>
       <DownloadHiking>
         <h5>Tu es intéressé ? </h5>
