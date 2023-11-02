@@ -27,6 +27,10 @@ const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
     const getData = async () => {
       const data = await get_gpx(hikingId);
       const parser = new gpxParser();
+      if (data === '"Get gpx error"') {
+        console.log("There isn't gpx for this activites");
+        return;
+      }
       parser.parse(data);
       setPositions(
         parser.tracks[0].points.map((point) => [point.lat, point.lon]),
@@ -46,19 +50,23 @@ const HikingLocation = ({ hiking }: { hiking: HikingInformation }) => {
 
   return (
     <LocationHiking>
-      <Map
-        key={positions[0].toString()}
-        // @ts-ignore
-        center={positionCenter}
-        zoom={11.5}
-        scrollWheelZoom={true}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Polyline
-          pathOptions={{ fillColor: "red", color: "blue" }}
-          positions={positions}
-        />
-      </Map>
+      {positions.length === 1 ? (
+        <></>
+      ) : (
+        <Map
+          key={positions[0].toString()}
+          // @ts-ignore
+          center={positionCenter}
+          zoom={11.5}
+          scrollWheelZoom={true}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <Polyline
+            pathOptions={{ fillColor: "red", color: "blue" }}
+            positions={positions}
+          />
+        </Map>
+      )}
       {hiking.images.map((image, index) => (
         <ImageHiking key={image} onClick={() => setFullScreenId(index)}>
           <img

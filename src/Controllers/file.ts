@@ -16,3 +16,9 @@ export const sendImageStatic = (req: Request, res: Response) => {
 
   res.sendFile(path.join(__dirname, "dist/Home", fileName));
 };
+
+export const sendFavicon = (req: Request, res: Response) => {
+  const fileName = req.params.fileName;
+
+  res.sendFile(path.join(__dirname, "dist/Favicon", fileName));
+};
