@@ -39,6 +39,8 @@ export const HeaderHikingStyle = styled.div`
     font-size: 36px;
     font-weight: 500;
     margin-bottom: 12px;
+    padding-right: 45px;
+    word-break: break-word;
   }
 
   > p {
@@ -101,8 +103,8 @@ const favoriteAnimationHover = keyframes`
 
 export const StarFavorite = styled.div<{ $isSelected: boolean }>`
   position: absolute;
-  right: 30px;
-  bottom: 75px;
+  right: 24px;
+  bottom: 92px;
   width: 40px;
   height: 40px;
   cursor: pointer;
