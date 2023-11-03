@@ -14,6 +14,10 @@ export const HikingStyle = styled.section`
     box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
     border-radius: 20px;
     background-color: white;
+
+    @media screen and (max-width: 768px) {
+      width: 95%;
+    }
   }
 `;
 
