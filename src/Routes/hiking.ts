@@ -69,7 +69,7 @@ router.get("/images", getImages);
 
 router.get("/imageState/:path", getImagesState);
 
-router.get("/hikesState", getHikesStates);
+router.get("/hikesState/:categoryId", getHikesStates);
 
 router.get("/getHikingInformation/:hikingId", getHikingInformation);
 

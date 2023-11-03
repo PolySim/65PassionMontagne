@@ -7,7 +7,13 @@ const API_KEY = import.meta.env.PROD
   ? import.meta.env.VITE_PUBLIC_BACK_URL_PROD
   : import.meta.env.VITE_PUBLIC_BACK_URL_DEV;
 
-const HikingState = ({ visible }: { visible: boolean }) => {
+const HikingState = ({
+  visible,
+  categoryId,
+}: {
+  visible: boolean;
+  categoryId: number;
+}) => {
   const [hikesState, setHikesState] = useState<HikesState>([
     {
       state: "",
@@ -18,7 +24,7 @@ const HikingState = ({ visible }: { visible: boolean }) => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await getHikesState();
+      const res = await getHikesState(categoryId);
       setHikesState(res);
     };
 
@@ -33,7 +39,9 @@ const HikingState = ({ visible }: { visible: boolean }) => {
             src={`${API_KEY}/hiking/imageState/${hikingState.path}`}
             alt={hikingState.state}
           />
-          <StateName to={`/1/${hikingState.id}`}>{hikingState.state}</StateName>
+          <StateName to={`/${categoryId}/${hikingState.id}`}>
+            {hikingState.state}
+          </StateName>
         </div>
       ))}
     </HikingStateStyle>

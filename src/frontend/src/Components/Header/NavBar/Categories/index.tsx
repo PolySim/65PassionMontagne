@@ -48,8 +48,11 @@ const Categories = () => {
         <ImageCategory>
           {categories.map((category, index) => (
             <React.Fragment key={category.id}>
-              {index === 0 ? (
-                <HikingState visible={categoryHover === category.id} />
+              {index < 4 ? (
+                <HikingState
+                  categoryId={category.id}
+                  visible={categoryHover === category.id}
+                />
               ) : (
                 <img
                   src={`${API_KEY}/categories/getImage/${category.id}`}

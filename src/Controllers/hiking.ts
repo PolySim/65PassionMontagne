@@ -99,10 +99,13 @@ type Hikes = {
 
 export const getHikesStates = (req: Request, res: Response) => {
   try {
+    const { categoryId } = req.params;
+
     const connection = createNewConnection();
     connection.query(
       `SELECT *
-       FROM hikesState;`,
+       FROM hikesState
+       WHERE categoryId = ${categoryId};`,
       (error: QueryError, results: Hikes) => {
         error_query(error, res);
         res.json(results);
@@ -281,8 +284,7 @@ export const getHikes = async (req: Request, res: Response) => {
 
 export const getHikesWithState = async (req: Request, res: Response) => {
   try {
-    const categoryId = req.params.categoryId;
-    const stateId = req.params.stateId;
+    const { categoryId, stateId } = req.params;
 
     const connection = createNewConnection();
     const getHikes = util.promisify(connection.query).bind(connection);

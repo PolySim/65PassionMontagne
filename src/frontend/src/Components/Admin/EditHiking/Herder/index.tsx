@@ -51,7 +51,7 @@ const EditHeader = ({
     const getData = async () => {
       const difficultyResult = await get_difficulty();
       setDifficulties(difficultyResult);
-      const stateResult = await getHikesState();
+      const stateResult = await getHikesState(parseInt(categoryId || "1"));
       setStates(stateResult);
     };
 

@@ -30,7 +30,7 @@ const MenuPhone = ({
     const getData = async () => {
       const data = await getCategoriesInformation();
       setCategories(data);
-      const res = await getHikesState();
+      const res = await getHikesState(1);
       setHikesState(res);
     };
 

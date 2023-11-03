@@ -7,7 +7,7 @@ import {
 } from "@/Components/Hiking/styled.ts";
 import { CommentsType, HikingInformation } from "@/type.ts";
 import { useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context.ts";
 import { add_favorite } from "@/API/addFavorite.ts";
 import { get_comments } from "@/API/getComments.ts";
@@ -72,12 +72,12 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
             <p>
               {hiking.content.split("\n").map((line, index) =>
                 index + 1 === hiking.content.split("\n").length ? (
-                  <>{line}</>
+                  <React.Fragment key={index}>{line}</React.Fragment>
                 ) : (
-                  <>
+                  <React.Fragment key={index}>
                     {line}
                     <br />
-                  </>
+                  </React.Fragment>
                 ),
               )}
             </p>
@@ -89,12 +89,12 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
             <p>
               {hiking.indication.split("\n").map((line, index) =>
                 index + 1 === hiking.indication.split("\n").length ? (
-                  <>{line}</>
+                  <React.Fragment key={index}>{line}</React.Fragment>
                 ) : (
-                  <>
+                  <React.Fragment key={index}>
                     {line}
                     <br />
-                  </>
+                  </React.Fragment>
                 ),
               )}
             </p>
