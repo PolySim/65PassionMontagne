@@ -33,6 +33,7 @@ export type CategoriesInformation = {
   name: string;
   name_en: string;
   id: number;
+  withState: boolean;
 }[];
 
 export type HikesState = {

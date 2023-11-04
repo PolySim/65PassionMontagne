@@ -93,22 +93,35 @@ export const NavBarPhoneStyle = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-export const MenuPhoneStyle = styled.div<{ $isOpen: boolean }>`
+export const MenuContainer = styled.div<{ $isOpen: boolean }>`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  height: 100vh;
+  width: 100vw;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
+  overflow: hidden;
+  transform: ${(props) =>
+    props.$isOpen ? "translateX(0)" : "translateX(-100%)"};
+  transition: transform 0.3s ease-in-out;
+`;
+
+export const MenuPhoneStyle = styled.div<{ $withStateOpen: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  min-width: 100vw;
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: white;
   transform: ${(props) =>
-    props.$isOpen ? "translateX(0)" : "translateX(-100%)"};
+    props.$withStateOpen ? "translateX(-100%)" : "translateX(0)"};
   transition: transform 0.3s ease-in-out;
 `;
 
@@ -122,6 +135,19 @@ export const LinkMenuPhone = styled(Link)<{
   color: ${(props) => (props.$isFavorite ? color.orange : color.black)};
   text-decoration: none;
   margin-top: 24px;
+`;
+
+export const CategoriesWithState = styled.div`
+  font-size: 24px;
+  font-family: ${font.rubik};
+  font-weight: 500;
+  color: ${color.black};
+  text-decoration: none;
+  margin-top: 24px;
+`;
+
+export const BackCategories = styled(CategoriesWithState)`
+  color: ${color.orange};
 `;
 
 export const CategoriesStyle = styled.div`

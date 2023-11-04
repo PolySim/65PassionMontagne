@@ -1,14 +1,19 @@
-import { LinkMenuPhone, MenuPhoneStyle } from "@/Components/Header/styled.ts";
+import {
+  CategoriesWithState,
+  LinkMenuPhone,
+  MenuPhoneStyle,
+} from "@/Components/Header/styled.ts";
 import React, { useEffect, useState } from "react";
-import { CategoriesInformation, HikesState } from "@/type.ts";
+import { CategoriesInformation } from "@/type.ts";
 import { getCategoriesInformation } from "@/API/getCategoriesInformation.ts";
-import { getHikesState } from "@/API/getHikesStates.ts";
 
 const MenuPhone = ({
-  isOpen,
+  handlerStateOpen,
+  withStateOpen,
   setIsOpen,
 }: {
-  isOpen: boolean;
+  handlerStateOpen: (id: number) => void;
+  withStateOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [categories, setCategories] = useState<CategoriesInformation>([
@@ -16,13 +21,7 @@ const MenuPhone = ({
       id: 0,
       name: "",
       name_en: "",
-    },
-  ]);
-  const [hikesState, setHikesState] = useState<HikesState>([
-    {
-      state: "",
-      id: 1,
-      path: "gavarnie.jpeg",
+      withState: false,
     },
   ]);
 
@@ -30,15 +29,13 @@ const MenuPhone = ({
     const getData = async () => {
       const data = await getCategoriesInformation();
       setCategories(data);
-      const res = await getHikesState(1);
-      setHikesState(res);
     };
 
     void getData();
   }, []);
 
   return (
-    <MenuPhoneStyle $isOpen={isOpen}>
+    <MenuPhoneStyle $withStateOpen={withStateOpen}>
       <LinkMenuPhone
         onClick={() => setIsOpen(false)}
         $isFavorite
@@ -46,25 +43,16 @@ const MenuPhone = ({
       >
         Favorite
       </LinkMenuPhone>
-      <LinkMenuPhone
-        onClick={() => setIsOpen(false)}
-        to={categories[0].id.toString()}
-      >
-        {categories[0].name}
-      </LinkMenuPhone>
-      {hikesState.map((state) => (
-        <LinkMenuPhone
-          key={state.state}
-          onClick={() => setIsOpen(false)}
-          $isState
-          to={`${categories[0].id}/${state.id}`}
-        >
-          {state.state}
-        </LinkMenuPhone>
-      ))}
-      {categories
-        .filter((_category, i) => i > 0)
-        .map((category) => (
+
+      {categories.map((category) =>
+        category.withState ? (
+          <CategoriesWithState
+            key={category.name}
+            onClick={() => handlerStateOpen(category.id)}
+          >
+            {category.name}
+          </CategoriesWithState>
+        ) : (
           <LinkMenuPhone
             key={category.name}
             onClick={() => setIsOpen(false)}
@@ -72,7 +60,8 @@ const MenuPhone = ({
           >
             {category.name}
           </LinkMenuPhone>
-        ))}
+        ),
+      )}
     </MenuPhoneStyle>
   );
 };

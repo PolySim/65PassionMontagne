@@ -33,17 +33,23 @@ type CategoriesInformation = {
   id: number;
   name: string;
   name_en: string;
+  withState: 0 | 1;
 }[];
 
 export const getCategoriesInformation = (req: Request, res: Response) => {
   try {
     const connection = createNewConnection();
     connection.query(
-      `SELECT id, name, name_en
+      `SELECT id, name, name_en, withState
        FROM categories;`,
       (error, results: CategoriesInformation) => {
         error_query(error, res);
-        res.json(results);
+        res.json(
+          results.map((result) => ({
+            ...result,
+            withState: result.withState === 1,
+          })),
+        );
       },
     );
     connection.end();
