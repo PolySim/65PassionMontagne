@@ -20,6 +20,7 @@ const Categories = () => {
       id: 0,
       name: "",
       name_en: "",
+      withState: false,
     },
   ]);
 

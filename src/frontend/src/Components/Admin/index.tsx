@@ -17,6 +17,7 @@ const Admin = () => {
       id: -1,
       name: "",
       name_en: "",
+      withState: false,
     },
   ]);
 
