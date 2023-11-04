@@ -17,14 +17,16 @@ export const HikesSearchContainer = styled.div`
   }
 `;
 
-export const HikingSearchResult = styled.div`
+export const HikingSearchResult = styled.div<{ $isFocus: boolean }>`
   padding: 12px 58px;
   font-family: ${font.m2};
   border-bottom: 1px solid #ccc;
   position: relative;
   text-align: start;
+  background-color: ${(props) =>
+    props.$isFocus ? color.lightYellow : "white"};
 
-  > p:nth-of-type(1) {
+  >p: nth-of-type(1) {
     font-size: 18px;
     color: black;
   }
