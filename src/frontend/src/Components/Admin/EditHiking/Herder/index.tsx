@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { get_difficulty } from "@/API/getDifficulty.ts";
 import { getHikesState } from "@/API/getHikesStates.ts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { update_header } from "@/API/updateHeader.ts";
 import { create_album } from "@/API/createAlbum.ts";
 import ArrowNav from "@/Components/SVG/arrowNav.tsx";
@@ -46,6 +46,7 @@ const EditHeader = ({
       difficulty: "",
     },
   ]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
@@ -68,8 +69,7 @@ const EditHeader = ({
       });
       if ("hikingId" in newHikingId && newHikingId.hikingId) {
         const newUrl = `/admin/${categoryId}/${newHikingId.hikingId}`;
-        window.history.replaceState({}, "", newUrl);
-        window.location.reload();
+        navigate(newUrl);
       }
     }
   };
