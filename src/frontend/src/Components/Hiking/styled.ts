@@ -45,6 +45,7 @@ export const HeaderHikingStyle = styled.div`
     margin-bottom: 12px;
     padding-right: 45px;
     word-break: break-word;
+    filter: drop-shadow(0 0 0.75rem ${color.black});
   }
 
   > p {
@@ -52,6 +53,7 @@ export const HeaderHikingStyle = styled.div`
     margin-top: 6px;
     font-size: 20px;
     font-family: ${font.m2};
+    filter: drop-shadow(0 0 0.75rem ${color.black});
   }
 
   > p:nth-of-type(1) {
@@ -350,7 +352,7 @@ export const FullScreenImageStyle = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 1000;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
