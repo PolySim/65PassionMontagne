@@ -60,10 +60,14 @@ const DescriptionHiking = ({ hiking }: { hiking: HikingInformation }) => {
           <p>Dénivelé</p>
           <p>{hiking.elevation} m</p>
         </div>
-        <div>
-          <p>Durée</p>
-          <p>{hiking.duration}</p>
-        </div>
+        {hiking.duration ? (
+          <div>
+            <p>Durée</p>
+            <p>{hiking.duration}</p>
+          </div>
+        ) : (
+          <></>
+        )}
       </StatisticalHiking>
       <HikingResume>
         {hiking.content ? (
