@@ -30,7 +30,7 @@ const EditHeader = ({
   setHiking: React.Dispatch<React.SetStateAction<HikingInformation>>;
 }) => {
   const { hikingId, categoryId } = useParams();
-  const { register, handleSubmit } = useForm<HeaderFormType>();
+  const { register, handleSubmit, setValue } = useForm<HeaderFormType>();
   const [states, setStates] = useState<HikesState>([
     {
       id: 1,
@@ -54,6 +54,8 @@ const EditHeader = ({
       setDifficulties(difficultyResult);
       const stateResult = await getHikesState(parseInt(categoryId || "1"));
       setStates(stateResult);
+      setValue("difficulty", difficultyResult[0].id);
+      setValue("state", stateResult[0].id);
     };
 
     void getData();
