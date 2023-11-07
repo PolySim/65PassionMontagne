@@ -54,8 +54,20 @@ const EditHeader = ({
       setDifficulties(difficultyResult);
       const stateResult = await getHikesState(parseInt(categoryId || "1"));
       setStates(stateResult);
-      setValue("difficulty", difficultyResult[0].id);
-      setValue("state", stateResult[0].id);
+      const difficulty = difficultyResult.find(
+        (d) => d.difficulty === hiking.difficulty,
+      )?.id;
+      const state = stateResult.find((d) => d.state === hiking.state)?.id;
+      if (difficulty) {
+        setValue("difficulty", difficulty);
+      } else {
+        setValue("difficulty", difficultyResult[0].id);
+      }
+      if (state) {
+        setValue("state", state);
+      } else {
+        setValue("state", stateResult[0].id);
+      }
     };
 
     void getData();
