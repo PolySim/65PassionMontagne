@@ -1,14 +1,13 @@
-// import connection from "~/db/database_connection";
 import { createNewConnection } from "~/db/database_connection";
 import { Request, Response } from "express";
 import error_query from "~/db/error_query";
 import path from "path";
 import { QueryError } from "mysql2";
 import * as util from "util";
-import console from "console";
 import fs from "fs";
 import sharp from "sharp";
 import process from "process";
+import {getEmailByReq} from "~/Encrypt/jwt";
 
 const unlinkAsync = util.promisify(fs.unlink);
 const copyFileAsync = util.promisify(fs.copyFile);
@@ -39,7 +38,7 @@ export const getGPX = (req: Request, res: Response) => {
         res.setHeader("Content-Disposition", `attachment; filename=${gpx}`);
         res.setHeader("Content-Type", "application/gpx+xml");
         res.sendFile(
-          path.join(__dirname, process.env.PATHCTR || "", `GPX/${gpx}`),
+          path.join(process.env.PATH_DATA || "", `GPX/${gpx}`),
         );
       },
     );
@@ -80,8 +79,7 @@ export const getImagesState = (req: Request, res: Response) => {
     const imagePath = req.params.path;
     res.sendFile(
       path.join(
-        __dirname,
-        process.env.PATHCTR || "",
+        process.env.PATH_DATA || "",
         `/hiking_image/state/${imagePath}`,
       ),
     );
@@ -214,8 +212,8 @@ export const getHikingImage = (req: Request, res: Response) => {
     if (imageId === "undefined") {
       return res.sendFile(
         path.join(
-          __dirname,
-          process.env.PATHCTR || "",
+          // process.env.PATHCTR || "",
+          process.env.PATH_DATA || "",
           `hiking_image/default.png`,
         ),
       );
@@ -231,16 +229,14 @@ export const getHikingImage = (req: Request, res: Response) => {
         if (results[0]) {
           res.sendFile(
             path.join(
-              __dirname,
-              process.env.PATHCTR || "",
+              process.env.PATH_DATA || "",
               `/hiking_image/${results[0].hikingId}/${results[0].path}`,
             ),
           );
         } else {
           res.sendFile(
             path.join(
-              __dirname,
-              process.env.PATHCTR || "",
+              process.env.PATH_DATA || "",
               `hiking_image/default.png`,
             ),
           );
@@ -446,8 +442,8 @@ export const reorderImages = async (req: Request, res: Response) => {
         values: [i + 1, images[i]],
       });
     }
-    res.json({ result: "reorder image success" });
     connection.end();
+    res.json({ result: "reorder image success" });
   } catch (error) {
     console.log(`reorder error : ${error}`);
     res.json({ error: "reorder error" });
@@ -485,13 +481,14 @@ export const downloadImages = async (req: Request, res: Response) => {
           await copyFileAsync(image.path, tempImagePath);
 
           const imageTemp = sharp(tempImagePath);
-          await imageTemp.resize(1500);
+          await imageTemp.resize(3000);
           await imageTemp.toFile(image.path);
           await unlinkAsync(tempImagePath);
         };
 
         try {
-          resize();
+          void resize();
+          console.log("resize success");
           res.json({ result: "success" });
         } catch (e) {
           console.log(`error in resize image : ${e}`);
@@ -499,6 +496,7 @@ export const downloadImages = async (req: Request, res: Response) => {
         }
       });
       connection.end();
+      console.log("end connection");
     }
   } catch (error) {
     console.log("download image error");
@@ -522,8 +520,8 @@ export const updateMainImage = async (req: Request, res: Response) => {
       values: [mainImage, hikingId],
     });
 
-    res.json({ result: "Edit Main Image success" });
     connection.end();
+    res.json({ result: "Edit Main Image success" });
   } catch (error) {
     console.log(`error in edit Main Image : ${error}`);
     res.json({ error: "Edit Main Image" });
@@ -546,8 +544,7 @@ export const deleteImage = async (req: Request, res: Response) => {
     })) as [{ path: string }];
 
     const fullPath = path.join(
-      __dirname,
-      process.env.PATHCTR || "",
+      process.env.PATH_DATA || "",
       "hiking_image",
       hikingId.toString(),
       filePath[0].path,
@@ -561,18 +558,9 @@ export const deleteImage = async (req: Request, res: Response) => {
     });
 
     fs.unlinkSync(fullPath);
-    fs.unlinkSync(
-      path.join(
-        __dirname,
-        process.env.PATHCTR || "",
-        "hiking_image",
-        hikingId.toString(),
-        filePath[0].path.slice(1),
-      ),
-    );
 
-    res.json({ result: "image delete with success" });
     connection.end();
+    res.json({ result: "image delete with success" });
   } catch (error) {
     console.log(`delete image error : ${error}`);
     res.json({ error: "delete image error" });
@@ -603,14 +591,15 @@ export const uploadNewGpx = async (req: Request, res: Response) => {
 
     if (lastName[0]) {
       await updatePath({
-        sql: `UPDATE gpx
+        sql: `UPDATE GPX
               SET path = ?
-              WHERE id = ?`,
+              WHERE hikingId = ?`,
         values: [gpxName, hikingId],
       });
 
       if (lastName[0].path !== gpxName) {
-        const fullPath = path.join(__dirname, "data/GPX", lastName[0].path);
+        const fullPath = path.join(process.env.PATH_DATA || "", "/GPX", lastName[0].path);
+
         fs.unlinkSync(fullPath);
       }
     } else {
@@ -659,7 +648,8 @@ export const createAlbum = async (req: Request, res: Response) => {
 
 export const getFavorite = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const email = getEmailByReq(req, res);
+    if (!email) return res.json([])
 
     const connection = createNewConnection();
     const getFavoriteQuery = util.promisify(connection.query).bind(connection);
@@ -672,7 +662,7 @@ export const getFavorite = async (req: Request, res: Response) => {
             ORDER BY title
 
       `,
-      values: [userId],
+      values: [email],
     })) as {
       id: number;
       main_image: number;
@@ -714,7 +704,7 @@ export const getAllHikes = async (_req: Request, res: Response) => {
     connection.end();
   } catch (e) {
     console.log(`error in getAllHiking : ${e}`);
-    res.json({ error: "getAllHiking" });
+    res.json({ error: `getAllHiking - ${e}` });
   }
 };
 
@@ -741,8 +731,7 @@ export const rotateImage = async (req: Request, res: Response) => {
     }
 
     const imageUrl = path.join(
-      __dirname,
-      process.env.PATHCTR || "",
+      process.env.PATH_DATA || "",
       `/hiking_image/${imageInformation[0].hikingId}/${imageInformation[0].path}`,
     );
 
@@ -755,13 +744,13 @@ export const rotateImage = async (req: Request, res: Response) => {
       await image.toFile(imageUrl);
       await unlinkAsync(tempImagePath);
 
-      res.json({ message: "Image rotated and replaced successfully." });
+      connection.end();
+      res.json({ result: "Image rotated and replaced successfully." });
     } catch (e) {
       res
         .status(500)
         .json({ error: "Unable to rotate and replace the image." });
     }
-    connection.end();
   } catch (e) {
     console.log(`error in rotate image : ${e}`);
     res.status(500).json({ error: `error in rotate image : ${e}` });

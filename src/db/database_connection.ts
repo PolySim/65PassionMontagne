@@ -1,5 +1,4 @@
 import mysql from "mysql2";
-import console from "console";
 
 const dbConfig = {
   host: process.env.DB_HOST,

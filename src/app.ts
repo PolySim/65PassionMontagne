@@ -9,7 +9,6 @@ const hikingRoutes = require("./Routes/hiking");
 const categoriesRoutes = require("./Routes/categories");
 const commentRoute = require("./Routes/comment");
 const difficultyRoute = require("./Routes/difficulty");
-const sendFileRoute = require("./Routes/file");
 const app = express();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -34,6 +33,5 @@ app.use("/hiking", hikingRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/comment", commentRoute);
 app.use("/difficulty", difficultyRoute);
-app.use("/", sendFileRoute);
 
 module.exports = app;

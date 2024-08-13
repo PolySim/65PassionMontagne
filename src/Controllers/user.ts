@@ -6,6 +6,7 @@ import * as util from "util";
 import path from "path";
 import process from "process";
 import { createNewConnection } from "~/db/database_connection";
+import {decodeToken, getEmailByReq} from "~/Encrypt/jwt";
 
 const jwt = require("jsonwebtoken");
 
@@ -216,7 +217,10 @@ export const signInToken = async (req: Request, res: Response) => {
 
 export const addFavorite = async (req: Request, res: Response) => {
   try {
-    const { userId, hikingId } = req.body;
+    const { hikingId } = req.body;
+
+    const email = getEmailByReq(req, res);
+    if (!email) return res.status(401)
 
     const connection = createNewConnection();
     const addFavoriteQuery = util.promisify(connection.query).bind(connection);
@@ -224,7 +228,7 @@ export const addFavorite = async (req: Request, res: Response) => {
     await addFavoriteQuery({
       sql: `INSERT INTO favorite (userId, hikingId)
             VALUES (?, ?)`,
-      values: [userId, hikingId],
+      values: [email, hikingId],
     });
 
     console.log("Favorite add with success");
@@ -237,7 +241,10 @@ export const addFavorite = async (req: Request, res: Response) => {
 
 export const removeFavorite = async (req: Request, res: Response) => {
   try {
-    const { userId, hikingId } = req.body;
+    const { hikingId } = req.body;
+
+    const email = getEmailByReq(req, res);
+    if (!email) return res.status(401)
 
     const connection = createNewConnection();
     const removeFavoriteQuery = util
@@ -249,7 +256,7 @@ export const removeFavorite = async (req: Request, res: Response) => {
             FROM favorite
             WHERE userId = ?
               AND hikingId = ?`,
-      values: [userId, hikingId],
+      values: [email, hikingId],
     });
 
     res.json({ result: "Remove favorite success" });

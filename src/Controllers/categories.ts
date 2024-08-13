@@ -18,7 +18,7 @@ export const getCategoriesImage = (req: Request, res: Response) => {
         error_query(error, res);
         const imagePath: string = results[0].path;
         res.sendFile(
-          path.join(__dirname, process.env.PATHCTR || "", `/Menu/${imagePath}`),
+          path.join(process.env.PATH_DATA || "", `/Menu/${imagePath}`),
         );
       },
     );

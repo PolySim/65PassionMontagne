@@ -41,9 +41,8 @@ const storageImage = multer.diskStorage({
   destination: (req, file, cb) => {
     const hikingId = req.params.hikingId;
     const uploadPath = path.join(
-      __dirname,
-      process.env.PATHRoute || "",
-      "hiking_image",
+      process.env.PATH_DATA || "",
+      "/hiking_image",
       hikingId,
     );
     if (!fs.existsSync(uploadPath)) {
@@ -101,7 +100,7 @@ router.delete("/deleteImage", deleteImage);
 
 const storageGpx = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "data/GPX");
+    const uploadPath = path.join(process.env.PATH_DATA || "", "/GPX");
     cb(null, uploadPath);
   },
   filename: (req: Request, file, cb) => {
@@ -117,7 +116,7 @@ router.post("/uploadGpx/:hikingId", uploadGpx.single("gpx"), uploadNewGpx);
 
 router.post("/createAlbum", createAlbum);
 
-router.get("/getFavorites/:userId", getFavorite);
+router.get("/getFavorites/favorite", getFavorite);
 
 router.get("/getAllHikes", getAllHikes);
 
