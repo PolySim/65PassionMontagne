@@ -17,9 +17,15 @@ export const getEmailByReq = (req: Request, res: Response) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) return;
+  if (!token) {
+    console.error('No token found');
+    return
+  };
 
   const decodedToken = decodeToken(token);
-  if (!decodedToken || typeof decodedToken === 'string') return;
+  if (!decodedToken || typeof decodedToken === 'string') {
+    console.error('Token is not valid');
+    return
+  };
   return decodedToken.email;
 }

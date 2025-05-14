@@ -164,7 +164,7 @@ export const getHikingInformation = (req: Request, res: Response) => {
               hiking.elevation,
               hiking.duration
        FROM hiking
-                JOIN hikesState ON hikesState.id = hiking.state_id
+                LEFT JOIN hikesState ON hikesState.id = hiking.state_id
                 JOIN difficulty ON difficulty.id = hiking.difficulty
        WHERE hiking.id = ${hikingId}`,
       (error: QueryError, results: [HikingInformationWithoutImage]) => {
